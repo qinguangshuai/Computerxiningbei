@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    //动画时间
+    android:duration="500">
+    //平移，从底部到设置的位置
+    <translate android:fromYDelta="100%p" android:toYDelta="0"/>
+    //渐变，从无到有
+    <alpha android:fromAlpha="0" android:toAlpha="1.0"/>
+</set>

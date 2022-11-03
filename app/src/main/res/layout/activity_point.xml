@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/relativepoint"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/shenblue">
+
+    <LinearLayout
+        android:id="@+id/relative"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="83dp"
+            android:text="&#060;------------ 大通"
+            android:textColor="@color/colorWhite"
+            android:textSize="17sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="@string/title_name"
+            android:textColor="#70A6EE"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="83dp"
+            android:text="西宁 ------------&#062;"
+            android:textColor="@color/colorWhite"
+            android:textSize="17sp" />
+
+    </LinearLayout>
+    <!--<RelativeLayout
+        android:id="@+id/relative_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">-->
+    <com.example.socket.custom.xiningbei.ChangFengMap
+        android:id="@+id/changfengmap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <com.example.socket.custom.xiningbei.BaiLiMap
+        android:id="@+id/bailimap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <com.example.socket.custom.xiningbei.XiNingBeiMap
+        android:id="@+id/xiningbeimap"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.OneParkCar
+        android:id="@+id/oneParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.TwoParkCar
+        android:id="@+id/twoParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.ThreeParkCar
+        android:id="@+id/threeParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.FourParkCar
+        android:id="@+id/fourParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.FiveParkCar
+        android:id="@+id/fiveParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.SixParkCar
+        android:id="@+id/sixParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.SevenParkCar
+        android:id="@+id/sevenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.EightParkCar
+        android:id="@+id/eightParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.NineParkCar
+        android:id="@+id/nineParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.TenParkCar
+        android:id="@+id/tenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.ElevenParkCar
+        android:id="@+id/elevenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.TwelveParkCar
+        android:id="@+id/twelveParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.ThirteenParkCar
+        android:id="@+id/thirteenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.FourteenParkCar
+        android:id="@+id/fourteenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.FifteenParkCar
+        android:id="@+id/fifteenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.SixteenParkCar
+        android:id="@+id/sixteenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.SeventeenParkCar
+        android:id="@+id/seventeenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.EighteenParkCar
+        android:id="@+id/eighteenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.park.NineteenParkCar
+        android:id="@+id/nineteenParkCar"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.people.DrawCar
+        android:id="@+id/drawtop"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.people.TransferPeople
+        android:id="@+id/transferpeople"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.people.TransferPeopleOne
+        android:id="@+id/peopleone"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.people.TransferPeopleTwo
+        android:id="@+id/peopletwo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.people.TransferPeopleThree
+        android:id="@+id/peoplethree"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.example.socket.custom.people.TransferPeopleFour
+        android:id="@+id/peoplefour"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/point_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/narrow"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:padding="10dp"
+        android:src="@drawable/narrow" />
+</RelativeLayout>

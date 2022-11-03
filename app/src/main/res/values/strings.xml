@@ -1,0 +1,54 @@
+<resources>
+    <string name="app_name">智能调车</string>
+    <string name="title_name">西宁北站</string>
+    <string name="splash_name">数字机控器</string>
+    <string name="user">账号:</string>
+    <string name="pwd">密码:</string>
+    <string name="edit_user">请输入账号</string>
+    <string name="edit_pwd">请输入密码</string>
+    <string name="diaochezhang">调车长</string>
+    <string name="jikongqi">机控器</string>
+    <string name="quzhangtai">区长台</string>
+    <string name="chazhuantai">差转台</string>
+    <string name="zhidongyuan1">制动员01号</string>
+    <string name="zhidongyuan2">制动员02号</string>
+    <string name="zhidongyuan3">制动员03号</string>
+    <string name="zhidongyuan4">制动员04号</string>
+    <string name="zhidongyuan5">制动员05号</string>
+    <string name="battlefield_map">战场图</string>
+    <string name="bluetooth_shoes">蓝牙铁鞋</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="company">北京北交信通科技有限公司</string>
+    <string name="company_english">All Rights Reserved</string>
+    <string name="copyright">北交信通 版权所有</string>
+    <string name="userbian">用户编号</string>
+    <string name="pwdren">人  员  号</string>
+
+    <string name="app_id">51ce0e9e</string>
+    <string name="pref_key_iat_show">iat_show</string>
+    <string name="text_begin">请开始说话&#8230;</string>
+    <string name="pref_title_iat_show">显示听写界面</string>
+    <string name="pref_key_translate">translate</string>
+    <string name="pref_title_translate">翻译</string>
+    <string name="bluetooth_text">铁鞋蓝牙测试系统</string>
+    <string name="open_lamp">(已开启)</string>
+    <string name="close_lamp">(已关闭)</string>
+    <string name="signout_tips">退出提示</string>
+    <string name="whether_signout">确定退出登录吗</string>
+    <string name="news">消息</string>
+    <string name="news_setup">免打扰开关</string>
+    <string name="diaodan_details">调单详情</string>
+    <string name="adjustment">调单</string>
+    <string name="versionName">版本</string>
+    <string name="inspectVersion">检 查 新 版 本</string>
+    <string name="nodate">暂无调单</string>
+    <string name="nodatewu">本栏目暂无数据</string>
+    <string name="title_activity_zhan">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+
+    <string name="bugly_app_id">8a5e176b81</string>
+</resources>
