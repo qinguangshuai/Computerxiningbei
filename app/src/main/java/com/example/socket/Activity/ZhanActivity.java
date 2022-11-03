@@ -28,6 +28,7 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initView() {
+        //返回
         ImageView narrow = findViewById(R.id.narrow);
         narrow.setOnClickListener(this);
     }
