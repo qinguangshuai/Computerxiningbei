@@ -48,6 +48,30 @@
             android:textSize="18sp" />
 
     </LinearLayout>
+    <com.example.socket.custom.ChangFengMapsmall
+        android:layout_below="@id/relative"
+        android:id="@+id/changfengmapsmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        />
+
+    <com.example.socket.custom.BaiLiMapsmall
+        android:layout_below="@id/relative"
+        android:id="@+id/bailimapsmall"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+
+    <com.example.socket.custom.XiNingBeiMapsmall
+        android:layout_below="@id/relative"
+        android:id="@+id/xiningbeimapsmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+       android:layout_marginLeft="30dp"
+
+       />
 
     <ImageView
         android:id="@+id/enlarge"

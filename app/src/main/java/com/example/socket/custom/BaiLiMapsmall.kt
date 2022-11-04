@@ -1,4 +1,4 @@
-package com.example.socket.custom.xiningbei
+package com.example.socket.custom
 
 import android.content.Context
 import android.graphics.Canvas
@@ -11,8 +11,8 @@ import android.view.View
 /**
  * @date   2021/3/19 11:00
  */
-class BaiLiMap(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
-
+class BaiLiMapsmall(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
+    val beishu =  1.7F
     private val mPaint by lazy {
         Paint().also {
             it.color = Color.parseColor("#70A6EE")
@@ -35,7 +35,7 @@ class BaiLiMap(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
     }
     private val paint1 by lazy {
         Paint().also {
-            it.color = Color.parseColor("#70A6EE")
+            it.color = Color.parseColor("#625B5B")
             it.style = Paint.Style.FILL
             it.isAntiAlias = true
             it.strokeWidth = 3F
@@ -53,84 +53,84 @@ class BaiLiMap(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
         if (height != null && width != null) {
             //百立专用线
             canvas?.drawLine(
-                    50F,
-                    300F,
-                    500F,
-                    550F,
+                    50F/beishu,
+                    300F/beishu,
+                    500F/beishu,
+                    550F/beishu,
                     mPaint
             )
             canvas?.drawLine(
-                    500F,
-                    550F,
-                    800F,
-                    550F,
+                    500F/beishu,
+                    550F/beishu,
+                    800F/beishu,
+                    550F/beishu,
                     mPaint
             )
-            canvas?.drawText("百立专用线", 550F,530F, paint)
+            canvas?.drawText("百立专用线", 550F/beishu,530F/beishu, paint)
             //物资局专用线
             canvas?.drawLine(
-                    50F,
-                    150F,
-                    150F,
-                    150F,
+                    50F/beishu,
+                    150F/beishu,
+                    150F/beishu,
+                    150F/beishu,
                     mPaint
             )
             //斜线
             canvas?.drawLine(
-                    150F,
-                    150F,
-                    400F,
-                    350F,
+                    150F/beishu,
+                    150F/beishu,
+                    400F/beishu,
+                    350F/beishu,
                     mPaint
             )
             //物2
             canvas?.drawLine(
-                    400F,
-                    350F,
-                    1000F,
-                    350F,
+                    400F/beishu,
+                    350F/beishu,
+                    1000F/beishu,
+                    350F/beishu,
                     mPaint
             )
-            canvas?.drawText("物2", 700F,370F, paint)
+            canvas?.drawText("物2", 700F/beishu,370F/beishu, paint)
             //直线
             canvas?.drawLine(
-                    550F,
-                    450F,
-                    900F,
-                    450F,
+                    550F/beishu,
+                    450F/beishu,
+                    900F/beishu,
+                    450F/beishu,
                     mPaint
             )
             canvas?.drawLine(
-                    450F,
-                    350F,
-                    550F,
-                    450F,
+                    450F/beishu,
+                    350F/beishu,
+                    550F/beishu,
+                    450F/beishu,
                     mPaint
             )
-            canvas?.drawText("物1", 700F,470F, paint)
+            canvas?.drawText("物1", 700F/beishu,470F/beishu, paint)
             //直线
             canvas?.drawLine(
-                    550F,
-                    250F,
-                    750F,
-                    250F,
+                    550F/beishu,
+                    250F/beishu,
+                    750F/beishu,
+                    250F/beishu,
                     mPaint
             )
             canvas?.drawLine(
-                    500F,
-                    350F,
-                    550F,
-                    250F,
+                    500F/beishu,
+                    350F/beishu,
+                    550F/beishu,
+                    250F/beishu,
                     mPaint
             )
             canvas?.drawLine(
-                    750F,
-                    250F,
-                    800F,
-                    350F,
+                    750F/beishu,
+                    250F/beishu,
+                    800F/beishu,
+                    350F/beishu,
                     mPaint
             )
-            canvas?.drawText("物3", 700F,270F, paint)
+            canvas?.drawText("物3", 700F/beishu,270F/beishu, paint)
         }
     }
 }
