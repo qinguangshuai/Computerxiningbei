@@ -159,7 +159,7 @@
         android:layout_height="match_parent" />
 
     <com.example.socket.custom.people.DrawCar
-        android:id="@+id/drawtop"
+        android:id="@+id/train"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
@@ -188,11 +188,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
-
-    <TextView
-        android:id="@+id/point_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/narrow"
