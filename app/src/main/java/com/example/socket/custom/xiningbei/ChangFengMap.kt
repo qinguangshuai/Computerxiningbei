@@ -15,7 +15,7 @@ class ChangFengMap(context: Context?, attrs: AttributeSet?) : View(context, attr
 
     private val mPaint by lazy {
         Paint().also {
-            it.color = Color.parseColor("#000000")
+            it.color = Color.parseColor("#70A6EE")
             it.style = Paint.Style.FILL
             it.isAntiAlias = true
             it.strokeWidth = 3F
@@ -25,7 +25,7 @@ class ChangFengMap(context: Context?, attrs: AttributeSet?) : View(context, attr
 
     private val paint by lazy {
         Paint().also {
-            it.color = Color.parseColor("#FF0000")
+            it.color = Color.parseColor("#70A6EE")
             it.style = Paint.Style.FILL
             it.isAntiAlias = true
             it.strokeWidth = 1F
@@ -35,7 +35,7 @@ class ChangFengMap(context: Context?, attrs: AttributeSet?) : View(context, attr
     }
     private val paint1 by lazy {
         Paint().also {
-            it.color = Color.parseColor("#625B5B")
+            it.color = Color.parseColor("#70A6EE")
             it.style = Paint.Style.FILL
             it.isAntiAlias = true
             it.strokeWidth = 3F
