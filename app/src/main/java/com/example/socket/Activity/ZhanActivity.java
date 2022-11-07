@@ -9,6 +9,8 @@ import android.widget.ImageView;
 
 import com.example.socket.Bean.ZhanchangWrap;
 import com.example.socket.R;
+import com.example.socket.Unit.SpUtil;
+import com.example.socket.custom.move.ControlTranslation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,6 +19,10 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 public class ZhanActivity extends AppCompatActivity implements View.OnClickListener {
+
+    private View bailimap;
+    private View changfengmap;
+    private View xiningbeimap;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +37,12 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
         //返回
         ImageView narrow = findViewById(R.id.narrow);
         narrow.setOnClickListener(this);
+
+        bailimap = findViewById(R.id.bailimap);
+        changfengmap = findViewById(R.id.changfengmap);
+        xiningbeimap = findViewById(R.id.xiningbeimap);
+
+
     }
 
     private void getSp() {

@@ -74,6 +74,12 @@ import com.example.socket.adapter.AFactory;
 import com.example.socket.adapter.DetailAdapter;
 import com.example.socket.custom.BaiLiMapsmall;
 import com.example.socket.custom.ChangFengMapsmall;
+import com.example.socket.custom.TopViewdiaochezhang;
+import com.example.socket.custom.TopViewjiche;
+import com.example.socket.custom.TopViewlian1;
+import com.example.socket.custom.TopViewlian2;
+import com.example.socket.custom.TopViewlian3;
+import com.example.socket.custom.TopViewlian4;
 import com.example.socket.custom.XiNingBeiMapsmall;
 import com.example.socket.custom.data.Point3d;
 import com.example.socket.database.DiaoDan;
@@ -161,6 +167,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private ChangFengMapsmall changfengmapsmall;
     private BaiLiMapsmall bailimapsmall;
     private XiNingBeiMapsmall xiningbeimapsmall;
+    private TopViewjiche train;
+    private TopViewdiaochezhang diaochez;
+    private TopViewlian1 lianpeopleo;
+    private TopViewlian2 lianpeopletw;
+    private TopViewlian3 lianpeopleth;
+    private TopViewlian4 lianpeoplef;
 
     private void sendMessage(String msg, Pocket p) {
         p.setDataMessage(msg);
@@ -1551,6 +1563,20 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         popWindow.setFocusable(false);
         popWindow.setOutsideTouchable(false);
         popWindow.showAtLocation(customView, Gravity.BOTTOM, 0, 0);//展示
+
+
+        train = customView.findViewById(R.id.train);
+        diaochez = customView.findViewById(R.id.diaochez);
+        lianpeopleo = customView.findViewById(R.id.peopleo);
+        lianpeopletw = customView.findViewById(R.id.peopletw);
+        lianpeopleth = customView.findViewById(R.id.peopleth);
+        lianpeoplef = customView.findViewById(R.id.peoplef);
+        diaochez.setVisibility(View.GONE);
+        lianpeopleo.setVisibility(View.GONE);
+        lianpeopletw.setVisibility(View.GONE);
+        lianpeopleth.setVisibility(View.GONE);
+        lianpeoplef.setVisibility(View.GONE);
+
         changfengmapsmall = customView.findViewById(R.id.changfengmapsmall);
         bailimapsmall = customView.findViewById(R.id.bailimapsmall);
         xiningbeimapsmall = customView.findViewById(R.id.xiningbeimapsmall);
@@ -1570,15 +1596,19 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 //                ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 18, (float) 1.7);
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
-//                if (mMControlMapName.equals("zhu")) {
-//                    xiningbeimapsmall.setVisibility(View.VISIBLE);
-//                    changfengmapsmall.setVisibility(View.GONE);
-//                    bailimapsmall.setVisibility(View.GONE);
-//                } else  {
-//                    xiningbeimapsmall.setVisibility(View.GONE);
-//                    changfengmapsmall.setVisibility(View.VISIBLE);
-//                    bailimapsmall.setVisibility(View.GONE);
-//                }
+                if (mMControlMapName.equals("zheng")) {
+                    xiningbeimapsmall.setVisibility(View.VISIBLE);
+                    changfengmapsmall.setVisibility(View.GONE);
+                    bailimapsmall.setVisibility(View.GONE);
+                } else if(mMControlMapName.equals("cf")){
+                    xiningbeimapsmall.setVisibility(View.GONE);
+                    changfengmapsmall.setVisibility(View.VISIBLE);
+                    bailimapsmall.setVisibility(View.GONE);
+                }else if(mMControlMapName.equals("bl")){
+                    xiningbeimapsmall.setVisibility(View.GONE);
+                    changfengmapsmall.setVisibility(View.GONE);
+                    bailimapsmall.setVisibility(View.VISIBLE);
+                }
                 handlerPop.postDelayed(this, 1000);
             }
         };

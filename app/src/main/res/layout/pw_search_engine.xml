@@ -70,9 +70,31 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
        android:layout_marginLeft="30dp"
-
        />
-
+    <com.example.socket.custom.TopViewjiche
+        android:id="@+id/train"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewdiaochezhang
+        android:id="@+id/diaochez"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian1
+        android:id="@+id/peopleo"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian2
+        android:id="@+id/peopletw"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian3
+        android:id="@+id/peopleth"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian4
+        android:id="@+id/peoplef"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
     <ImageView
         android:id="@+id/enlarge"
         android:layout_width="60dp"
