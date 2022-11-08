@@ -158,36 +158,35 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.example.socket.custom.people.DrawCar
-        android:id="@+id/train"
+    <com.example.socket.custom.TopViewjiche
+        android:id="@+id/trainbig"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.example.socket.custom.people.TransferPeople
-        android:id="@+id/transferpeople"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewdiaochezhang
+        android:visibility="gone"
+        android:id="@+id/diaochezbig"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.example.socket.custom.people.TransferPeopleOne
-        android:id="@+id/peopleone"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian1
+        android:id="@+id/peobigo"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.example.socket.custom.people.TransferPeopleTwo
-        android:id="@+id/peopletwo"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian2
+        android:id="@+id/peobigtw"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.example.socket.custom.people.TransferPeopleThree
-        android:id="@+id/peoplethree"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian3
+        android:id="@+id/peobigth"
+        android:visibility="gone"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
-
-    <com.example.socket.custom.people.TransferPeopleFour
-        android:id="@+id/peoplefour"
+        android:layout_height="match_parent"/>
+    <com.example.socket.custom.TopViewlian4
+        android:visibility="gone"
+        android:id="@+id/peobigf"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone" />
+        android:layout_height="match_parent"/>
 
     <ImageView
         android:id="@+id/narrow"

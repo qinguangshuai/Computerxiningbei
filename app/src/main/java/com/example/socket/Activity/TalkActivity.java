@@ -69,7 +69,6 @@ import com.example.socket.Unit.HelperPacket;
 import com.example.socket.Unit.HexUtil;
 import com.example.socket.Unit.MultiAudioMixer;
 import com.example.socket.Unit.SpUtil;
-import com.example.socket.Unit.TrackDataUtil;
 import com.example.socket.adapter.AFactory;
 import com.example.socket.adapter.DetailAdapter;
 import com.example.socket.custom.BaiLiMapsmall;
@@ -82,6 +81,8 @@ import com.example.socket.custom.TopViewlian3;
 import com.example.socket.custom.TopViewlian4;
 import com.example.socket.custom.XiNingBeiMapsmall;
 import com.example.socket.custom.data.Point3d;
+import com.example.socket.custom.move.ControlTranslationsmall;
+import com.example.socket.custom.track.TrackDataUtil;
 import com.example.socket.database.DiaoDan;
 import com.example.socket.database.DiaoDanDatabase;
 import com.example.socket.udp.UdpHelperServer;
@@ -272,7 +273,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 point3d.setX(b1);
                                                 point3d.setY(a1);
                                                 mGetRatioOfGpsPointCar = GetRatioOfGpsPoint(point3d, mGetGudaoOfGpsPoint);
-
+                                                Log.e("机车运行轨迹：", mRatioOfGpsTrackCar + "  ：  " + mRatioOfGpsTrackCar);
                                                 DecimalFormat df = new DecimalFormat("###.000000");
                                                 String lat = df.format(Double.valueOf(a1));
                                                 String lon = df.format(Double.valueOf(b1));
@@ -1101,7 +1102,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     private void getSp() {
         mControlMap = new SpUtil(getApplicationContext(), "controlmap");
-        mControlMap.setName("zhu");
+        mControlMap.setName("zheng");
 
         //控制人员显示
         mPeople0 = new SpUtil(getApplicationContext(), "people0");
@@ -1588,12 +1589,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         Runnable runnablePop = new Runnable() {
             @Override
             public void run() {
-//                ControlTranslationsmall.proplrMove1(mControlMap, train, mRatioOfGpsTrackCar, mGpsPistanceCar, 20, 18, (float) 1.7);
-//                ControlTranslationsmall.proplrMove1(mPeople0, diaochez, mRatioOfGpsTrackCar20, mGpsPistanceCar20, 20, 18, (float) 1.7);
-//                ControlTranslationsmall.proplrMove1(mPeople1, lianpeopleo, mRatioOfGpsTrackCar01, mGpsPistanceCar01, 20, 18, (float) 1.7);
-//                ControlTranslationsmall.proplrMove1(mPeople2, lianpeopletw, mRatioOfGpsTrackCar02, mGpsPistanceCar02, 20, 18, (float) 1.7);
-//                ControlTranslationsmall.proplrMove1(mPeople3, lianpeopleth, mRatioOfGpsTrackCar03, mGpsPistanceCar03, 20, 18, (float) 1.7);
-//                ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 18, (float) 1.7);
+                ControlTranslationsmall.proplrMove1(mControlMap, train, mRatioOfGpsTrackCar, mGpsPistanceCar, 20, 28);
+                ControlTranslationsmall.proplrMove1(mPeople0, diaochez, mRatioOfGpsTrackCar20, mGpsPistanceCar20, 20, 28);
+                ControlTranslationsmall.proplrMove1(mPeople1, lianpeopleo, mRatioOfGpsTrackCar01, mGpsPistanceCar01, 20, 28);
+                ControlTranslationsmall.proplrMove1(mPeople2, lianpeopletw, mRatioOfGpsTrackCar02, mGpsPistanceCar02, 20, 28);
+                ControlTranslationsmall.proplrMove1(mPeople3, lianpeopleth, mRatioOfGpsTrackCar03, mGpsPistanceCar03, 20, 28);
+                ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 28);
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
                 if (mMControlMapName.equals("zheng")) {
@@ -1604,7 +1605,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     xiningbeimapsmall.setVisibility(View.GONE);
                     changfengmapsmall.setVisibility(View.VISIBLE);
                     bailimapsmall.setVisibility(View.GONE);
-                }else if(mMControlMapName.equals("bl")){
+                }else {
                     xiningbeimapsmall.setVisibility(View.GONE);
                     changfengmapsmall.setVisibility(View.GONE);
                     bailimapsmall.setVisibility(View.VISIBLE);
