@@ -90,28 +90,6 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
         EventBus.getDefault().register(this);
         initView();
         getSp();
-        findViewById(R.id.qiehuan).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                a++;
-                if (a % 3 == 0) {
-                    mXiningbeimap.setVisibility(View.VISIBLE);
-                    mChangfengmap.setVisibility(View.GONE);
-                    mBailimap.setVisibility(View.GONE);
-                    zhengPark();
-                }else if (a % 3 == 1) {
-                    mXiningbeimap.setVisibility(View.GONE);
-                    mChangfengmap.setVisibility(View.VISIBLE);
-                    mBailimap.setVisibility(View.GONE);
-                    changfengPark();
-                }else if (a % 3 == 2) {
-                    mXiningbeimap.setVisibility(View.GONE);
-                    mChangfengmap.setVisibility(View.GONE);
-                    mBailimap.setVisibility(View.VISIBLE);
-                    bailiPark();
-                }
-            }
-        });
     }
 
     private void initView() {

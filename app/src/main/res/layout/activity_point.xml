@@ -199,9 +199,4 @@
         android:layout_marginRight="10dp"
         android:padding="10dp"
         android:src="@drawable/narrow" />
-    <Button
-        android:id="@+id/qiehuan"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="切换"/>
 </RelativeLayout>
