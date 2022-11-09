@@ -51,8 +51,8 @@
     <com.example.socket.custom.xiningbei.ChangFengMapsmall
         android:layout_below="@id/relative"
         android:id="@+id/changfengmapsmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:visibility="gone"
         />
 
@@ -67,9 +67,8 @@
     <com.example.socket.custom.xiningbei.XiNingBeiMapsmall
         android:layout_below="@id/relative"
         android:id="@+id/xiningbeimapsmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       android:layout_marginLeft="30dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
        />
     <com.example.socket.custom.people.TopViewjiche
         android:id="@+id/train"

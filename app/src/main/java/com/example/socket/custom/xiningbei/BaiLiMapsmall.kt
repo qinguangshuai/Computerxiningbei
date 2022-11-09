@@ -66,7 +66,7 @@ class BaiLiMapsmall(context: Context?, attrs: AttributeSet?) : View(context, att
                     550F/beishu,
                     mPaint
             )
-            canvas?.drawText("百立专用线", 550F/beishu,530F/beishu, paint)
+            canvas?.drawText("百立专用线", 550F/beishu,585F/beishu, paint)
             //物资局专用线
             canvas?.drawLine(
                     50F/beishu,
@@ -91,7 +91,7 @@ class BaiLiMapsmall(context: Context?, attrs: AttributeSet?) : View(context, att
                     350F/beishu,
                     mPaint
             )
-            canvas?.drawText("物2", 700F/beishu,370F/beishu, paint)
+            canvas?.drawText("物2", 700F/beishu,380F/beishu, paint)
             //直线
             canvas?.drawLine(
                     550F/beishu,
@@ -107,7 +107,7 @@ class BaiLiMapsmall(context: Context?, attrs: AttributeSet?) : View(context, att
                     450F/beishu,
                     mPaint
             )
-            canvas?.drawText("物1", 700F/beishu,470F/beishu, paint)
+            canvas?.drawText("物1", 700F/beishu,480F/beishu, paint)
             //直线
             canvas?.drawLine(
                     550F/beishu,
@@ -130,7 +130,7 @@ class BaiLiMapsmall(context: Context?, attrs: AttributeSet?) : View(context, att
                     350F/beishu,
                     mPaint
             )
-            canvas?.drawText("物3", 700F/beishu,270F/beishu, paint)
+            canvas?.drawText("物3", 700F/beishu,280F/beishu, paint)
         }
     }
 }
