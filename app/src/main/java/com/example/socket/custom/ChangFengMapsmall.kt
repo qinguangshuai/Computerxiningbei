@@ -100,7 +100,7 @@ class ChangFengMapsmall(context: Context?, attrs: AttributeSet?) : View(context,
                     500F/beishu,
                     mPaint
             )
-            canvas?.drawText("长丰专用线", 500F/beishu,520F/beishu, paint)
+            canvas?.drawText("长丰专用线", 500F/beishu,530F/beishu, paint)
             //园1
             canvas?.drawLine(
                     600F/beishu,
@@ -117,7 +117,7 @@ class ChangFengMapsmall(context: Context?, attrs: AttributeSet?) : View(context,
                     mPaint
             )
             canvas?.drawText("物流专用线", 10F/beishu,250F/beishu, paint)
-            canvas?.drawText("园1", 400F/beishu,320F/beishu, paint)
+            canvas?.drawText("园1", 400F/beishu,335F/beishu, paint)
             //园2
             canvas?.drawLine(
                     500F/beishu,
@@ -140,7 +140,7 @@ class ChangFengMapsmall(context: Context?, attrs: AttributeSet?) : View(context,
                     300F/beishu,
                     mPaint
             )
-            canvas?.drawText("园2", 400F/beishu,220F/beishu, paint)
+            canvas?.drawText("园2", 400F/beishu,235F/beishu, paint)
 
             //道口
             canvas?.drawText("道口", 240F/beishu,180F/beishu, paint)

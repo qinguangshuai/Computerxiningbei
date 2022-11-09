@@ -1589,12 +1589,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         Runnable runnablePop = new Runnable() {
             @Override
             public void run() {
-                ControlTranslationsmall.proplrMove1(mControlMap, train, mRatioOfGpsTrackCar, mGpsPistanceCar, 20, 28);
-                ControlTranslationsmall.proplrMove1(mPeople0, diaochez, mRatioOfGpsTrackCar20, mGpsPistanceCar20, 20, 28);
-                ControlTranslationsmall.proplrMove1(mPeople1, lianpeopleo, mRatioOfGpsTrackCar01, mGpsPistanceCar01, 20, 28);
-                ControlTranslationsmall.proplrMove1(mPeople2, lianpeopletw, mRatioOfGpsTrackCar02, mGpsPistanceCar02, 20, 28);
-                ControlTranslationsmall.proplrMove1(mPeople3, lianpeopleth, mRatioOfGpsTrackCar03, mGpsPistanceCar03, 20, 28);
-                ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 28);
+                ControlTranslationsmall.proplrMove1(mControlMap, train, mRatioOfGpsTrackCar, mGpsPistanceCar, 20, 18);
+                ControlTranslationsmall.proplrMove1(mPeople0, diaochez, mRatioOfGpsTrackCar20, mGpsPistanceCar20, 20, 18);
+                ControlTranslationsmall.proplrMove1(mPeople1, lianpeopleo, mRatioOfGpsTrackCar01, mGpsPistanceCar01, 20, 18);
+                ControlTranslationsmall.proplrMove1(mPeople2, lianpeopletw, mRatioOfGpsTrackCar02, mGpsPistanceCar02, 20, 18);
+                ControlTranslationsmall.proplrMove1(mPeople3, lianpeopleth, mRatioOfGpsTrackCar03, mGpsPistanceCar03, 20, 18);
+                ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 18);
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
                 if (mMControlMapName.equals("zheng")) {
