@@ -158,31 +158,31 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <com.example.socket.custom.TopViewjiche
+    <com.example.socket.custom.people.TopViewjiche
         android:id="@+id/trainbig"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewdiaochezhang
+    <com.example.socket.custom.people.TopViewdiaochezhang
         android:visibility="gone"
         android:id="@+id/diaochezbig"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian1
+    <com.example.socket.custom.people.TopViewlian1
         android:id="@+id/peobigo"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian2
+    <com.example.socket.custom.people.TopViewlian2
         android:id="@+id/peobigtw"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian3
+    <com.example.socket.custom.people.TopViewlian3
         android:id="@+id/peobigth"
         android:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian4
+    <com.example.socket.custom.people.TopViewlian4
         android:visibility="gone"
         android:id="@+id/peobigf"
         android:layout_width="match_parent"
@@ -199,4 +199,9 @@
         android:layout_marginRight="10dp"
         android:padding="10dp"
         android:src="@drawable/narrow" />
+    <Button
+        android:id="@+id/qiehuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="切换"/>
 </RelativeLayout>

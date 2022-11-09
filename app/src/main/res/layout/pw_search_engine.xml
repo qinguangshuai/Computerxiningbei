@@ -48,7 +48,7 @@
             android:textSize="18sp" />
 
     </LinearLayout>
-    <com.example.socket.custom.ChangFengMapsmall
+    <com.example.socket.custom.xiningbei.ChangFengMapsmall
         android:layout_below="@id/relative"
         android:id="@+id/changfengmapsmall"
         android:layout_width="wrap_content"
@@ -56,7 +56,7 @@
         android:visibility="gone"
         />
 
-    <com.example.socket.custom.BaiLiMapsmall
+    <com.example.socket.custom.xiningbei.BaiLiMapsmall
         android:layout_below="@id/relative"
         android:id="@+id/bailimapsmall"
         android:layout_width="match_parent"
@@ -64,34 +64,34 @@
         android:visibility="gone"
         />
 
-    <com.example.socket.custom.XiNingBeiMapsmall
+    <com.example.socket.custom.xiningbei.XiNingBeiMapsmall
         android:layout_below="@id/relative"
         android:id="@+id/xiningbeimapsmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
        android:layout_marginLeft="30dp"
        />
-    <com.example.socket.custom.TopViewjiche
+    <com.example.socket.custom.people.TopViewjiche
         android:id="@+id/train"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewdiaochezhang
+    <com.example.socket.custom.people.TopViewdiaochezhang
         android:id="@+id/diaochez"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian1
+    <com.example.socket.custom.people.TopViewlian1
         android:id="@+id/peopleo"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian2
+    <com.example.socket.custom.people.TopViewlian2
         android:id="@+id/peopletw"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian3
+    <com.example.socket.custom.people.TopViewlian3
         android:id="@+id/peopleth"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.example.socket.custom.TopViewlian4
+    <com.example.socket.custom.people.TopViewlian4
         android:id="@+id/peoplef"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
