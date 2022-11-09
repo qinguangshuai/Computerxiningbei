@@ -130,7 +130,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private SpUtil mUrgentState;
     private String mCarGps = "";
     private String mCarSuLv = "";
-    private TextView zhuyishixiang;
+    private TextView zhuyishixiang, track_talk;
     private RecyclerView cur_recy;
     private TextView cur_total, cur_gou;
     private TextView cur_dang, current_adjustment;
@@ -1797,6 +1797,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
         return result;
     }
+
     //解析原始数据
     public void appendRawMsg(String s) {
         io = true;

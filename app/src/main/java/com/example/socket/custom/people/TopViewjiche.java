@@ -1,4 +1,4 @@
-package com.example.socket.custom;
+package com.example.socket.custom.people;
 
 import android.content.Context;
 import android.util.AttributeSet;

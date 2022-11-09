@@ -44,7 +44,7 @@ public class FourParkCar extends View {
         //笔宽5像素
         mPaint.setStrokeWidth(20);
         //设置为红笔
-        mPaint.setColor(Color.parseColor("#C00404"));
+        mPaint.setColor(Color.parseColor("#FD9DA8"));
         //设置抗锯齿
         mPaint.setAntiAlias(true);
         //设置图像抖动处理
