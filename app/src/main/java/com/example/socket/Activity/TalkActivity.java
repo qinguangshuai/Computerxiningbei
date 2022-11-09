@@ -165,15 +165,15 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public static String switchTime;
     private FileUtil fileUtil;
     private boolean lingClear = false;
-    private ChangFengMapsmall changfengmapsmall;
-    private BaiLiMapsmall bailimapsmall;
-    private XiNingBeiMapsmall xiningbeimapsmall;
     private TopViewjiche train;
     private TopViewdiaochezhang diaochez;
     private TopViewlian1 lianpeopleo;
     private TopViewlian2 lianpeopletw;
     private TopViewlian3 lianpeopleth;
     private TopViewlian4 lianpeoplef;
+    private BaiLiMapsmall mBailimapsmall;
+    private XiNingBeiMapsmall mXiningbeimapsmall;
+    private ChangFengMapsmall mChangfengmapsmall;
 
     private void sendMessage(String msg, Pocket p) {
         p.setDataMessage(msg);
@@ -1578,9 +1578,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         lianpeopleth.setVisibility(View.GONE);
         lianpeoplef.setVisibility(View.GONE);
 
-        changfengmapsmall = customView.findViewById(R.id.changfengmapsmall);
-        bailimapsmall = customView.findViewById(R.id.bailimapsmall);
-        xiningbeimapsmall = customView.findViewById(R.id.xiningbeimapsmall);
+        mChangfengmapsmall = customView.findViewById(R.id.changfengmapsmall);
+        mBailimapsmall = customView.findViewById(R.id.bailimapsmall);
+        mXiningbeimapsmall = customView.findViewById(R.id.xiningbeimapsmall);
 
         Log.e("chua", mRatioOfGpsTrackCar + "   " + mGpsPistanceCar + "    " + mControlMap + "     ");
         aaa = true;
@@ -1598,17 +1598,17 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
                 if (mMControlMapName.equals("zheng")) {
-                    xiningbeimapsmall.setVisibility(View.VISIBLE);
-                    changfengmapsmall.setVisibility(View.GONE);
-                    bailimapsmall.setVisibility(View.GONE);
+                    mXiningbeimapsmall.setVisibility(View.VISIBLE);
+                    mChangfengmapsmall.setVisibility(View.GONE);
+                    mBailimapsmall.setVisibility(View.GONE);
                 } else if(mMControlMapName.equals("cf")){
-                    xiningbeimapsmall.setVisibility(View.GONE);
-                    changfengmapsmall.setVisibility(View.VISIBLE);
-                    bailimapsmall.setVisibility(View.GONE);
+                    mXiningbeimapsmall.setVisibility(View.GONE);
+                    mChangfengmapsmall.setVisibility(View.VISIBLE);
+                    mBailimapsmall.setVisibility(View.GONE);
                 }else {
-                    xiningbeimapsmall.setVisibility(View.GONE);
-                    changfengmapsmall.setVisibility(View.GONE);
-                    bailimapsmall.setVisibility(View.VISIBLE);
+                    mXiningbeimapsmall.setVisibility(View.GONE);
+                    mChangfengmapsmall.setVisibility(View.GONE);
+                    mBailimapsmall.setVisibility(View.VISIBLE);
                 }
                 handlerPop.postDelayed(this, 1000);
             }
