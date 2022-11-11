@@ -3,6 +3,15 @@ package com.example.socket.app;
 import android.annotation.SuppressLint;
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
+import android.os.Process;
+
+import androidx.annotation.NonNull;
+
+import com.example.socket.Activity.SplashActivity;
+import com.example.socket.Unit.CrashHandler;
+
+import org.jetbrains.annotations.NotNull;
 
 import me.jessyan.autosize.AutoSizeConfig;
 import me.jessyan.autosize.unit.Subunits;
@@ -48,5 +57,7 @@ public class MyApp extends Application {
                 //.errorActivity(DefaultErrorActivity.class)
                 .apply();
         CustomActivityOnCrash.install(this);*/
+        CrashHandler.getInstance().init(this); // 一定要先初始化
+        Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance());
     }
 }

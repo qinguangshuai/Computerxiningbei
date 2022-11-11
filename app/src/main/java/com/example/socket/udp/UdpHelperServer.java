@@ -46,7 +46,6 @@ public class UdpHelperServer {
             @Override
             public void run() {
                 while (keepRunning) {
-
                     getStrMessage();
                 }
             }
