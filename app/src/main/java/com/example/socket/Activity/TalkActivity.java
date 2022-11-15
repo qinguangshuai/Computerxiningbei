@@ -71,15 +71,15 @@ import com.example.socket.Unit.MultiAudioMixer;
 import com.example.socket.Unit.SpUtil;
 import com.example.socket.adapter.AFactory;
 import com.example.socket.adapter.DetailAdapter;
-import com.example.socket.custom.BaiLiMapsmall;
-import com.example.socket.custom.ChangFengMapsmall;
-import com.example.socket.custom.TopViewdiaochezhang;
-import com.example.socket.custom.TopViewjiche;
-import com.example.socket.custom.TopViewlian1;
-import com.example.socket.custom.TopViewlian2;
-import com.example.socket.custom.TopViewlian3;
-import com.example.socket.custom.TopViewlian4;
-import com.example.socket.custom.XiNingBeiMapsmall;
+import com.example.socket.custom.xiningbei.BaiLiMapsmall;
+import com.example.socket.custom.xiningbei.ChangFengMapsmall;
+import com.example.socket.custom.people.TopViewdiaochezhang;
+import com.example.socket.custom.people.TopViewjiche;
+import com.example.socket.custom.people.TopViewlian1;
+import com.example.socket.custom.people.TopViewlian2;
+import com.example.socket.custom.people.TopViewlian3;
+import com.example.socket.custom.people.TopViewlian4;
+import com.example.socket.custom.xiningbei.XiNingBeiMapsmall;
 import com.example.socket.custom.data.Point3d;
 import com.example.socket.custom.move.ControlTranslationsmall;
 import com.example.socket.custom.track.TrackDataUtil;
@@ -165,6 +165,13 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public static String switchTime;
     private FileUtil fileUtil;
     private boolean lingClear = false;
+    private Handler mhandler1;
+    private Handler mhandler0;
+    private Handler mhandler2;
+    private Handler mhandler3;
+    private Handler mhandler4;
+    private String gouName1;
+    private static int gouN;
     private TopViewjiche train;
     private TopViewdiaochezhang diaochez;
     private TopViewlian1 lianpeopleo;
@@ -268,6 +275,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 Log.e("弯点", "弯点b1: " + b1 + " ");
                                                 //计算股道
                                                 mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(b1, a1);
+                                                track_talk.setText(mGetGudaoOfGpsPoint);
                                                 mRatioOfGpsTrackCar = String.valueOf(mGetGudaoOfGpsPoint);
                                                 Point3d point3d = new Point3d();
                                                 point3d.setX(b1);
@@ -899,6 +907,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             gouTotal = diaocan_list.get(2);
             //设置layoutmanager
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.scrollToPositionWithOffset(mTopPosition, 0);
+            layoutManager.setStackFromEnd(true);
             cur_recy.setLayoutManager(layoutManager);
 
             //设置adapter
@@ -1155,10 +1165,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
         init();
 
-        GPIO.gpio_crtl_in(130, 1);
-        ioReadThread = new IOReadThread();//监听pe2io口
-        ioReadThread.start();
-
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
         di = soundPool.load(this, R.raw.di, 1);//滴
         sp = getSharedPreferences("swy", Context.MODE_PRIVATE); //私有数据
@@ -1325,6 +1331,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Ip_Adress, port);*/
 
         mGpsHandler.postDelayed(mGpsRunnable, 3000);
+
+        GPIO.gpio_crtl_in(130, 1);
+        ioReadThread = new IOReadThread();//监听pe2io口
+        ioReadThread.start();
     }
 
     private Handler mHandler = new Handler();
@@ -1387,6 +1397,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     private String mTime;
     private String gjhId = "";
+    private int mTopPosition = 0;
 
     private class ListDatabase extends AsyncTask<Void, Void, String> {
 
@@ -1403,6 +1414,13 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 gou_number = users.get(0).getGou_number();
                 mTime = users.get(0).getCurrent_time();
                 gjhId = users.get(0).getGjhId();
+                String[] gouNumberSplit = gou_number.split("-");
+                if (gouNumberSplit.length > 1) {
+                    mTopPosition = gouNumberSplit.length;
+                } else {
+                    mTopPosition = 0;
+                }
+                Log.e("gou_number测试", "" + gou_number + "    " + gouNumberSplit.length);
             }
             return str;
         }
@@ -1419,6 +1437,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 cur_img.setVisibility(View.GONE);
                 //cur_dang.setText("1");
                 //cur_total.setText(users.size() + "");
+                //gou_number.split()
                 DisplayDiaodanLayout(details, gou_number, mTime);
             } else {
                 cur_danhao.setText("- -");
@@ -1554,7 +1573,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 break;
         }
     }
+
     boolean aaa = false;
+
     public void showPopwindow() {
         LayoutInflater layoutInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View customView = layoutInflater.inflate(R.layout.pw_search_engine, null);
@@ -1601,11 +1622,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     mXiningbeimapsmall.setVisibility(View.VISIBLE);
                     mChangfengmapsmall.setVisibility(View.GONE);
                     mBailimapsmall.setVisibility(View.GONE);
-                } else if(mMControlMapName.equals("cf")){
+                } else if (mMControlMapName.equals("cf")) {
                     mXiningbeimapsmall.setVisibility(View.GONE);
                     mChangfengmapsmall.setVisibility(View.VISIBLE);
                     mBailimapsmall.setVisibility(View.GONE);
-                }else {
+                } else {
                     mXiningbeimapsmall.setVisibility(View.GONE);
                     mChangfengmapsmall.setVisibility(View.GONE);
                     mBailimapsmall.setVisibility(View.VISIBLE);
@@ -1787,6 +1808,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             }
         }
     }
+
     public static String toUtf8(String str) {
         String result = null;
         try {
@@ -1798,13 +1820,38 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         return result;
     }
 
+    private class ReadDatabase extends AsyncTask<Void, Void, String> {
+
+        private List<DiaoDan> users;
+
+        @Override
+        protected String doInBackground(Void... params) {
+            users = db.DiaodanDAO().findByTime();
+            for (DiaoDan temp : users) {
+                db.DiaodanDAO().delete(temp);
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String details) {
+
+        }
+    }
+
     //解析原始数据
     public void appendRawMsg(String s) {
         io = true;
         try {
             Pocket strbean = JSONArray.parseObject(s, Pocket.class);//将数据流整合成包
             Log.e("", "" + strbean.getType());
-            /*switch (strbean.getType()) {
+            switch (strbean.getType()) {
+                case "DeleteDataBase":
+                    ReadDatabase readDatabase = new ReadDatabase();
+                    readDatabase.execute();
+                    Intent in = new Intent("adjustment");
+                    sendBroadcast(in);
+                    break;
                 case "SwitchOrderAdjustment":
                     String dataMessage1 = strbean.getDataMessage();
                     JSONObject jsonObject = JSONObject.parseObject(dataMessage1);
@@ -2130,26 +2177,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
                     }
                     Log.e("swy", "appendRawMsg 3: " + ipAddress_domnic.toString());
-                    *//*if (!strbean.getIpAdress().matches(static_local_ipAdress)){
-                        for (int i =0;i<ipAddress_domnic2.length;i++){
-                            if (ipAddress_domnic2[i] == null){
-                                ipAddress_domnic2[i] = strbean.getIpAdress();
-                                break;
-                        }else if (ipAddress_domnic2[i].matches(strbean.getIpAdress())){
-                                break;
-                            }
-                            Log.e("swy", "appendRawMsg 2: "+ipAddress_domnic2[i]);
-                        }
-                        composeDataPublic2(strbean);
-                    }*//*
-
                     break;
-            }*/
+            }
         } catch (Exception e) {
             Log.e("qgs", e + "");
         }
-
-        //}
     }
 
     private String dateString = "";
@@ -2345,13 +2377,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                         int length = split.length;
                         cur_dang.setText(length + "");
                     }
-
+                    mTopPosition = Integer.valueOf(alpha[4]) - 1;
                     Intent in2 = new Intent("HookElimination");
                     in2.putExtra("name2", details);
                     sendBroadcast(in2);
                 }
             }
-
         }
     }
 
@@ -2389,6 +2420,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             }
             if (!gjhId.equals("") && !mGjhId.equals("")) {
                 if (gjhId.equals(mGjhId)) {
+                    mTopPosition = Integer.valueOf(alpha[4]);
                     cur_dang.setText(length + "");
                     Intent in2 = new Intent("HookElimination");
                     in2.putExtra("name2", details);
@@ -2842,7 +2874,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         return results;
     }
 
-
     //获取音频源数量
     private int[] GetMapSize() {
         int[] result = new int[5];
@@ -2861,7 +2892,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
         return result;
     }
-
 
     private short[] DecodeAudio(byte[] data) {
         /**
@@ -2932,9 +2962,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         } else {
         }
 
+        track_talk = findViewById(R.id.track_talk);
         zhuyishixiang = findViewById(R.id.zhuyishixiang);
         zhuyishixiang.setMovementMethod(ScrollingMovementMethod.getInstance());
 
+        TextView bianhao = findViewById(R.id.bianhao);
+        bianhao.setText(hao);
         cur_danhao = findViewById(R.id.danhao);
         cur_jiche = findViewById(R.id.jiche);
         cur_bianzhiren = findViewById(R.id.bianzhiren);
@@ -2970,7 +3003,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     int lingche_count = 0, shiche_index = 0;
     int i = 0;
-
 
     //pe5//检测sql口
     private class IOReadThread extends Thread {

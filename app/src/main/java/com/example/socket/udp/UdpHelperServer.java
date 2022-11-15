@@ -6,18 +6,10 @@ import android.util.Log;
 
 import com.example.socket.Unit.HexUtil;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ServerSocket;
-import java.net.UnknownHostException;
-import java.nio.ByteBuffer;
-import java.nio.channels.DatagramChannel;
 
 public class UdpHelperServer {
     private Handler handler = null;
@@ -158,12 +150,9 @@ public class UdpHelperServer {
             @Override
             public void run() {
                 //发送的数据报端口号，ip都指定好了
-
                 try {
                     outpacket = new DatagramPacket(output_data.getBytes(), output_data.getBytes().length, InetAddress.getByName(ip), port);
-                    if (ds != null) {
-                        ds.send(outpacket);
-                    }
+                    ds.send(outpacket);
                     Log.e("udp", "send: " + output_data);
                 } catch (IOException e) {
                     e.printStackTrace();
