@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ParkDataDao {
     /**
      * 数据库的增加方法
      */
-    public boolean add(String info, String gd, String lat, String lon, String ratioOfGpsPointCar) {
+    public boolean add(String info, String gd, String lat, String lon, double ratioOfGpsPointCar) {
         SQLiteDatabase db = helper.getWritableDatabase();
 //		db.execSQL("insert into info(name,phone) values(?,?)", new Object[]{NULL,phone});
 
@@ -53,8 +54,6 @@ public class ParkDataDao {
      */
     public int del(String info) {
         SQLiteDatabase db = helper.getReadableDatabase();
-//		db.execSQL("delete from info where name=?", new Object[]{name});
-
         /**
          * table 表名
          * whereClause  删除条件
@@ -63,6 +62,32 @@ public class ParkDataDao {
         int delete = db.delete(info, null, null);
         db.close();
         return delete;
+    }
+
+    public List<ParkDataUser> findMax(String info, String ddd) {
+        List<ParkDataUser> personLists = new ArrayList<ParkDataUser>();
+        SQLiteDatabase db = helper.getWritableDatabase();
+        //String sql = "DELETE FROM " + info + " WHERE time < " + "'" + str + "'";
+        /*Cursor cursor = db.query(info, new String[]{"MAX(" + ddd + ") AS MAX"}, null, null, null, null, null);
+        cursor.moveToFirst(); // to move the cursor to first record
+        int index  = cursor.getColumnIndex("MAX");
+        String gd = cursor.getString(index);
+
+        Log.e("ratioOfGpsPointCar", "max--" + index+"   "+gd);
+
+        ParkDataUser dataUser = new ParkDataUser();
+        personLists.add(dataUser);
+        cursor.close();
+        db.close();*/
+
+        String sql = "select max(ratioOfGpsPointCar) from " + info;
+        Log.e("SQL", sql);
+        Cursor c = db.rawQuery(sql, null);
+        double p = 0;
+        if (c.moveToFirst())
+            p = c.getDouble(0);
+        Log.e("ratioOfGpsPointCar", "max--" + p);
+        return personLists;
     }
 
     /**
@@ -93,7 +118,7 @@ public class ParkDataDao {
                 String ratioOfGpsPointCar = cursor.getString(4);    //获取我们的name值
                 ParkDataUser dataUser = new ParkDataUser();
 
-                System.out.println("gd--" + gd + "lat--" + lat+ "lon--" + lon+ "ratioOfGpsPointCar--" + ratioOfGpsPointCar);
+                System.out.println("gd--" + gd + "lat--" + lat + "lon--" + lon + "ratioOfGpsPointCar--" + ratioOfGpsPointCar);
                 dataUser.setId(anInt);
                 dataUser.setGd(gd);
                 dataUser.setLat(lat);

@@ -25,7 +25,6 @@ public class MyApp extends Application {
     public static int biaoji = 0;
     public static int sendbiaoji = 0;
 
-    @SuppressLint("RestrictedApi")
     @Override
     public void onCreate() {
         super.onCreate();

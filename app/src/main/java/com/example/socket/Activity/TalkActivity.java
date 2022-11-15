@@ -38,6 +38,7 @@ import android.widget.PopupWindow;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -71,18 +72,18 @@ import com.example.socket.Unit.MultiAudioMixer;
 import com.example.socket.Unit.SpUtil;
 import com.example.socket.adapter.AFactory;
 import com.example.socket.adapter.DetailAdapter;
-import com.example.socket.custom.xiningbei.BaiLiMapsmall;
-import com.example.socket.custom.xiningbei.ChangFengMapsmall;
 import com.example.socket.custom.people.TopViewdiaochezhang;
 import com.example.socket.custom.people.TopViewjiche;
 import com.example.socket.custom.people.TopViewlian1;
 import com.example.socket.custom.people.TopViewlian2;
 import com.example.socket.custom.people.TopViewlian3;
 import com.example.socket.custom.people.TopViewlian4;
-import com.example.socket.custom.xiningbei.XiNingBeiMapsmall;
 import com.example.socket.custom.data.Point3d;
 import com.example.socket.custom.move.ControlTranslationsmall;
 import com.example.socket.custom.track.TrackDataUtil;
+import com.example.socket.custom.xiningbei.BaiLiMapsmall;
+import com.example.socket.custom.xiningbei.ChangFengMapsmall;
+import com.example.socket.custom.xiningbei.XiNingBeiMapsmall;
 import com.example.socket.database.DiaoDan;
 import com.example.socket.database.DiaoDanDatabase;
 import com.example.socket.udp.UdpHelperServer;
@@ -149,6 +150,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private Double mGpsPistanceCar = 0.0;
     private double mGetRatioOfGpsPointCar;
     public SpUtil mControlMap;
+    private TopViewjiche train;
     private SpUtil mPeople0, mPeople1, mPeople2, mPeople3, mPeople4;
     public static String mRatioOfGpsTrackCar20 = "0";
     public static String mRatioOfGpsTrackCar01 = "0";
@@ -160,6 +162,18 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public static Double mGpsPistanceCar02 = 0.0;
     public static Double mGpsPistanceCar03 = 0.0;
     public static Double mGpsPistanceCar04 = 0.0;
+    private TopViewdiaochezhang diaochez;
+    private TopViewlian1 lianpeopleo;
+    private TopViewlian2 lianpeopletw;
+    private TopViewlian3 lianpeopleth;
+    private TopViewlian4 lianpeoplef;
+    private Handler mhandler1;
+    private Handler mhandler0;
+    private Handler mhandler2;
+    private Handler mhandler3;
+    private Handler mhandler4;
+    private String gouName1;
+    private static int gouN;
     public static int gouName;
     public static String switchType;
     public static String switchTime;
@@ -168,12 +182,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private ChangFengMapsmall changfengmapsmall;
     private BaiLiMapsmall bailimapsmall;
     private XiNingBeiMapsmall xiningbeimapsmall;
-    private TopViewjiche train;
-    private TopViewdiaochezhang diaochez;
-    private TopViewlian1 lianpeopleo;
-    private TopViewlian2 lianpeopletw;
-    private TopViewlian3 lianpeopleth;
-    private TopViewlian4 lianpeoplef;
 
     private void sendMessage(String msg, Pocket p) {
         p.setDataMessage(msg);
@@ -274,7 +282,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 point3d.setX(b1);
                                                 point3d.setY(a1);
                                                 mGetRatioOfGpsPointCar = GetRatioOfGpsPoint(point3d, mGetGudaoOfGpsPoint);
-                                                Log.e("机车运行轨迹：", mRatioOfGpsTrackCar + "  ：  " + mRatioOfGpsTrackCar);
+
                                                 DecimalFormat df = new DecimalFormat("###.000000");
                                                 String lat = df.format(Double.valueOf(a1));
                                                 String lon = df.format(Double.valueOf(b1));
@@ -900,6 +908,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             gouTotal = diaocan_list.get(2);
             //设置layoutmanager
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+            layoutManager.scrollToPositionWithOffset(mTopPosition, 0);
+            layoutManager.setStackFromEnd(true);
             cur_recy.setLayoutManager(layoutManager);
 
             //设置adapter
@@ -1103,7 +1113,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     private void getSp() {
         mControlMap = new SpUtil(getApplicationContext(), "controlmap");
-        mControlMap.setName("zheng");
+        mControlMap.setName("zhu");
 
         //控制人员显示
         mPeople0 = new SpUtil(getApplicationContext(), "people0");
@@ -1155,10 +1165,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
 
         init();
-
-        GPIO.gpio_crtl_in(130, 1);
-        ioReadThread = new IOReadThread();//监听pe2io口
-        ioReadThread.start();
 
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC, 1);
         di = soundPool.load(this, R.raw.di, 1);//滴
@@ -1326,6 +1332,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Ip_Adress, port);*/
 
         mGpsHandler.postDelayed(mGpsRunnable, 3000);
+
+        GPIO.gpio_crtl_in(130, 1);
+        ioReadThread = new IOReadThread();//监听pe2io口
+        ioReadThread.start();
     }
 
     private Handler mHandler = new Handler();
@@ -1388,6 +1398,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     private String mTime;
     private String gjhId = "";
+    private int mTopPosition = 0;
 
     private class ListDatabase extends AsyncTask<Void, Void, String> {
 
@@ -1404,6 +1415,13 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 gou_number = users.get(0).getGou_number();
                 mTime = users.get(0).getCurrent_time();
                 gjhId = users.get(0).getGjhId();
+                String[] gouNumberSplit = gou_number.split("-");
+                if (gouNumberSplit.length > 1) {
+                    mTopPosition = gouNumberSplit.length;
+                } else {
+                    mTopPosition = 0;
+                }
+                Log.e("gou_number测试", "" + gou_number + "    " + gouNumberSplit.length);
             }
             return str;
         }
@@ -1420,6 +1438,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 cur_img.setVisibility(View.GONE);
                 //cur_dang.setText("1");
                 //cur_total.setText(users.size() + "");
+                //gou_number.split()
                 DisplayDiaodanLayout(details, gou_number, mTime);
             } else {
                 cur_danhao.setText("- -");
@@ -1600,7 +1619,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 18);
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
-                if (mMControlMapName.equals("zheng")) {
+                if (mMControlMapName.equals("zhu")) {
                     xiningbeimapsmall.setVisibility(View.VISIBLE);
                     changfengmapsmall.setVisibility(View.GONE);
                     bailimapsmall.setVisibility(View.GONE);
@@ -1802,13 +1821,38 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         return result;
     }
 
+    private class ReadDatabase extends AsyncTask<Void, Void, String> {
+
+        private List<DiaoDan> users;
+
+        @Override
+        protected String doInBackground(Void... params) {
+            users = db.DiaodanDAO().findByTime();
+            for (DiaoDan temp : users) {
+                db.DiaodanDAO().delete(temp);
+            }
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String details) {
+
+        }
+    }
+
     //解析原始数据
     public void appendRawMsg(String s) {
         io = true;
         try {
             Pocket strbean = JSONArray.parseObject(s, Pocket.class);//将数据流整合成包
             Log.e("", "" + strbean.getType());
-            /*switch (strbean.getType()) {
+            switch (strbean.getType()) {
+                case "DeleteDataBase":
+                    ReadDatabase readDatabase = new ReadDatabase();
+                    readDatabase.execute();
+                    Intent in = new Intent("adjustment");
+                    sendBroadcast(in);
+                    break;
                 case "SwitchOrderAdjustment":
                     String dataMessage1 = strbean.getDataMessage();
                     JSONObject jsonObject = JSONObject.parseObject(dataMessage1);
@@ -2134,26 +2178,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
                     }
                     Log.e("swy", "appendRawMsg 3: " + ipAddress_domnic.toString());
-                    *//*if (!strbean.getIpAdress().matches(static_local_ipAdress)){
-                        for (int i =0;i<ipAddress_domnic2.length;i++){
-                            if (ipAddress_domnic2[i] == null){
-                                ipAddress_domnic2[i] = strbean.getIpAdress();
-                                break;
-                        }else if (ipAddress_domnic2[i].matches(strbean.getIpAdress())){
-                                break;
-                            }
-                            Log.e("swy", "appendRawMsg 2: "+ipAddress_domnic2[i]);
-                        }
-                        composeDataPublic2(strbean);
-                    }*//*
-
                     break;
-            }*/
+            }
         } catch (Exception e) {
             Log.e("qgs", e + "");
         }
-
-        //}
     }
 
     private String dateString = "";
@@ -2349,13 +2378,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                         int length = split.length;
                         cur_dang.setText(length + "");
                     }
-
+                    mTopPosition = Integer.valueOf(alpha[4]) - 1;
                     Intent in2 = new Intent("HookElimination");
                     in2.putExtra("name2", details);
                     sendBroadcast(in2);
                 }
             }
-
         }
     }
 
@@ -2393,6 +2421,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             }
             if (!gjhId.equals("") && !mGjhId.equals("")) {
                 if (gjhId.equals(mGjhId)) {
+                    mTopPosition = Integer.valueOf(alpha[4]);
                     cur_dang.setText(length + "");
                     Intent in2 = new Intent("HookElimination");
                     in2.putExtra("name2", details);
@@ -2846,7 +2875,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         return results;
     }
 
-
     //获取音频源数量
     private int[] GetMapSize() {
         int[] result = new int[5];
@@ -2865,7 +2893,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
         return result;
     }
-
 
     private short[] DecodeAudio(byte[] data) {
         /**
@@ -2935,12 +2962,13 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             xintiaoReadThread.start();*/
         } else {
         }
+
         track_talk = findViewById(R.id.track_talk);
-        TextView bianhao = findViewById(R.id.bianhao);
-        bianhao.setText(hao);
         zhuyishixiang = findViewById(R.id.zhuyishixiang);
         zhuyishixiang.setMovementMethod(ScrollingMovementMethod.getInstance());
 
+        TextView bianhao = findViewById(R.id.bianhao);
+        bianhao.setText(hao);
         cur_danhao = findViewById(R.id.danhao);
         cur_jiche = findViewById(R.id.jiche);
         cur_bianzhiren = findViewById(R.id.bianzhiren);
@@ -2976,7 +3004,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     int lingche_count = 0, shiche_index = 0;
     int i = 0;
-
 
     //pe5//检测sql口
     private class IOReadThread extends Thread {
