@@ -110,12 +110,12 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             "机控器" -> println("机控器")
             "区长台" -> println("区长台")
             "差转台" -> {
-                GPIO.gpio_crtl_out(128, 0) //pe0
+                /*GPIO.gpio_crtl_out(128, 0) //pe0
                 GPIO.gpio_crtl_out(140, 0) //pe12
                 GPIO.gpio_crtl_out(141, 0) //pe13
                 GPIO.gpio_crtl_out(142, 0) //pe14
                 GPIO.gpio_crtl_out(143, 0) //pe15
-                GPIO.gpio_crtl_out(144, 0) //pe16
+                GPIO.gpio_crtl_out(144, 0) //pe16*/
                 println("差转台")
             }
             else -> {

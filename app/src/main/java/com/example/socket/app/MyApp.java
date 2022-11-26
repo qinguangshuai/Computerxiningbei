@@ -9,7 +9,9 @@ import android.os.Process;
 import androidx.annotation.NonNull;
 
 import com.example.socket.Activity.SplashActivity;
+import com.example.socket.R;
 import com.example.socket.Unit.CrashHandler;
+import com.tencent.bugly.crashreport.CrashReport;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -35,7 +37,8 @@ public class MyApp extends Application {
                 .setSupportSP(true)
                 .setSupportSubunits(Subunits.MM);
 
-        //CrashReport.initCrashReport(getApplicationContext(), getString(R.string.bugly_app_id), false);
+        Thread.setDefaultUncaughtExceptionHandler(new CrashHandler());
+        CrashReport.initCrashReport(getApplicationContext(), getString(R.string.bugly_app_id), false);
 
         /*TouchEffectsManager.build(TouchEffectsWholeType.SCALE)//设置全局使用哪种效果
                 .addViewType(TouchEffectsViewType.ALL)//添加哪些View支持这个效果
@@ -56,7 +59,7 @@ public class MyApp extends Application {
                 //.errorActivity(DefaultErrorActivity.class)
                 .apply();
         CustomActivityOnCrash.install(this);*/
-        CrashHandler.getInstance().init(this); // 一定要先初始化
-        Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance());
+        //CrashHandler.getInstance().init(this); // 一定要先初始化
+        //Thread.setDefaultUncaughtExceptionHandler(CrashHandler.getInstance());
     }
 }

@@ -50,6 +50,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.socket.Bean.Pocket;
 import com.example.socket.Bean.TestPocket;
+import com.example.socket.Bean.TestUser;
 import com.example.socket.Bean.ZhanchangWrap;
 import com.example.socket.IO.GPIO;
 import com.example.socket.R;
@@ -70,8 +71,11 @@ import com.example.socket.Unit.HelperPacket;
 import com.example.socket.Unit.HexUtil;
 import com.example.socket.Unit.MultiAudioMixer;
 import com.example.socket.Unit.SpUtil;
+import com.example.socket.Unit.ZhiIndex;
 import com.example.socket.adapter.AFactory;
 import com.example.socket.adapter.DetailAdapter;
+import com.example.socket.custom.dao.ParkDataDao;
+import com.example.socket.custom.dao.ParkDataUser;
 import com.example.socket.custom.people.TopViewdiaochezhang;
 import com.example.socket.custom.people.TopViewjiche;
 import com.example.socket.custom.people.TopViewlian1;
@@ -152,11 +156,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public SpUtil mControlMap;
     private TopViewjiche train;
     private SpUtil mPeople0, mPeople1, mPeople2, mPeople3, mPeople4;
-    public static String mRatioOfGpsTrackCar20 = "0";
-    public static String mRatioOfGpsTrackCar01 = "0";
-    public static String mRatioOfGpsTrackCar02 = "0";
-    public static String mRatioOfGpsTrackCar03 = "0";
-    public static String mRatioOfGpsTrackCar04 = "0";
+    public static String mRatioOfGpsTrackCar20 = "-1";
+    public static String mRatioOfGpsTrackCar01 = "-1";
+    public static String mRatioOfGpsTrackCar02 = "-1";
+    public static String mRatioOfGpsTrackCar03 = "-1";
+    public static String mRatioOfGpsTrackCar04 = "-1";
     public static Double mGpsPistanceCar20 = 0.0;
     public static Double mGpsPistanceCar01 = 0.0;
     public static Double mGpsPistanceCar02 = 0.0;
@@ -182,6 +186,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private ChangFengMapsmall changfengmapsmall;
     private BaiLiMapsmall bailimapsmall;
     private XiNingBeiMapsmall xiningbeimapsmall;
+    boolean mControlLocation = false;
+    private List<Double> mZhiList = new ArrayList<>();
+    private ParkDataDao dataDao;
+    private ParkDataDao parkDataDao;
+    private List<ParkDataUser> mParkcar;
 
     private void sendMessage(String msg, Pocket p) {
         p.setDataMessage(msg);
@@ -276,7 +285,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 Log.e("弯点", "弯点b1: " + b1 + " ");
                                                 //计算股道
                                                 mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(b1, a1);
-                                                track_talk.setText(mGetGudaoOfGpsPoint);
+                                                track_talk.setText(mGetGudaoOfGpsPoint + "股道");
                                                 mRatioOfGpsTrackCar = String.valueOf(mGetGudaoOfGpsPoint);
                                                 Point3d point3d = new Point3d();
                                                 point3d.setX(b1);
@@ -288,10 +297,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 String lon = df.format(Double.valueOf(b1));
                                                 Double value1 = Double.valueOf(lat);
                                                 Double value2 = Double.valueOf(lon);
-                                                String latCar = lathead + "." + lat;
-                                                String lonCar = lonhead + "." + lon;
-                                                mCar.setLat(latCar + "");
-                                                mCar.setLon(lonCar + "");
+                                                //String latCar = lathead + "." + lat;
+                                                //String lonCar = lonhead + "." + lon;
+                                                mCar.setLat(lat + "");
+                                                mCar.setLon(lon + "");
                                                 Log.e("股道", "股道: " + lat + "  " + lon);
                                                 mCarGps = lat + "-" + lon;
                                                 DecimalFormat df1 = new DecimalFormat("#####0.00%");
@@ -301,7 +310,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 String gpsPoint = ratioOfGpsPoint.substring(0, ratioOfGpsPoint.indexOf("."));
                                                 mGpsPistanceCar = Double.valueOf(gpsPoint);
                                                 EventBus.getDefault().post(new ZhanchangWrap(mRatioOfGpsTrackCar, mGpsPistanceCar));
-                                                //EventBus.getDefault().post(new MessageWrap(a2 + "", b2));
+                                                //计算十五三车
+                                                distanceControl("1", mGetRatioOfGpsPointCar, lat, lon);
                                             }
                                         }
                                     } else {
@@ -798,6 +808,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public static String zhishiTrans, caozuoyuan, currnumber, peopleId, benJi, imei, hao, signatureId, diaohao = "";//四个sp内容
     public static String group;
     private List<String> mList = new ArrayList<>();//调单部分内容
+    private int mVehicleCommander = 0;
     public static Location location;
 
     public static String Ip_Adress = "36.110.196.90", static_local_ipAdress = "";//默认服务器ip，本地地址
@@ -851,7 +862,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private String name2;
     public static ArrayList<String> gou_list = new ArrayList<>();
 
-    private String TAG = "MainActivity: ";
+    private String TAG = "TalkActivity: ";
     private final int REQUESTCODE = 100;
 
     private void checkPermission() {
@@ -935,6 +946,17 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
             if (gouNumber.equals("")) {
                 cur_dang.setText("0");
+                /*String mVehicle = mList.get(0);
+                Log.e("0001",mVehicle+"");
+                String[] mCommander = mVehicle.split(",");
+                switch (mCommander[2]) {
+                    case "+":
+                        Integer integer = Integer.valueOf(mCommander[3]);
+                        break;
+                    case "-":
+
+                        break;
+                }*/
             } else {
                 String[] split = gouNumber.split("-");
                 int length = split.length;
@@ -944,7 +966,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             cur_recy.setAdapter(detailAdapter);
         } catch (Exception e) {
         }
-
     }
 
     private void clickListener() {
@@ -1113,7 +1134,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
     private void getSp() {
         mControlMap = new SpUtil(getApplicationContext(), "controlmap");
-        mControlMap.setName("zhu");
+        mControlMap.setName("zheng");
 
         //控制人员显示
         mPeople0 = new SpUtil(getApplicationContext(), "people0");
@@ -1138,7 +1159,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 .build();
 
         mStartHandler.sendEmptyMessageDelayed(0, 1000);
-
+        parkDataDao = new ParkDataDao(TalkActivity.this);
+        dataDao = new ParkDataDao(this);
         mSpPersonnelType = new SpUtil(getApplication(), "PersonnelType");
         caozuoyuan = mSpPersonnelType.getName();
         zhishiTrans = mSpPersonnelType.getStandard();
@@ -1177,34 +1199,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             Log.e("swy", "onCreate: " + speex.getFrameSize());
         }
 
-
-        initRecord();
-        initMic();
-
         ipAddress_domnic.clear();
-        /*for (int i = 0; i < ipAddress_domnic2.length; i++) {
-            ipAddress_domnic2[i] = null;
-        }*/
-        //公网
-        /*ipAddress_saved[0] = sp.getString("0","192.168.3.1");
-        ipAddress_saved[1] = sp.getString("1","192.168.3.2");
-        ipAddress_saved[2] = sp.getString("2","192.168.3.3");
-        ipAddress_saved[3] = sp.getString("3","192.168.3.4");
-        end_status.put(sp.getString(ipAddress_saved[0], ""), true);
-        end_status.put(sp.getString(ipAddress_saved[1], ""), true);
-        end_status.put(sp.getString(ipAddress_saved[2], ""), true);
-        end_status.put(sp.getString(ipAddress_saved[3], ""), true);
-        for (int i =0;i<ipAddress_saved.length;i++){
-            Log.e(TAG, "onCreate  getIpAddressData  : 第"+i+1+"个地址为"  +ipAddress_saved[i]);
-        }*/
-
-
-        //内网
-        /*end_status.put("192.168.3.192", true);
-        end_status.put("192.168.3.222", true);
-        end_status.put("192.168.3.223", true);
-        end_status.put("192.168.3.228", true);*/
-
 
         handler = new Handler() {
             @Override
@@ -1227,18 +1222,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
         //ipAddress_saved[4] = HelperPacket.GetIpAddress(Ip_status,TalkActivity.this);
         //tcpHelperServer = new TcpHelperServer(handler);
-        udpHelperServer = new UdpHelperServer();
-        udpHelperServer.GetRun();//udp运行接收端
-        udpHelperServer.GetHandler(handler);//运行消息传递
         //startService(new Intent(this, UDPClient.class));
-
-        pocket.setTime(System.currentTimeMillis());
-        pocket.setIpAdress(benJi);
-        pocket.setImei(imei);
-        pocket.setPeopleId(peopleId);
-        pocket.setUserCode(hao);
-        pocket.setType("login");
-        udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
 
         addLoc();
         getSp();
@@ -1333,9 +1317,29 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
         mGpsHandler.postDelayed(mGpsRunnable, 3000);
 
+        try {
+            udpHelperServer = new UdpHelperServer();
+            udpHelperServer.GetRun();//udp运行接收端
+            udpHelperServer.GetHandler(handler);//运行消息传递
+        } catch (Exception e) {
+
+        }
+
         GPIO.gpio_crtl_in(130, 1);
         ioReadThread = new IOReadThread();//监听pe2io口
         ioReadThread.start();
+
+        initRecord();
+        initMic();
+
+        /*mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(101.768745,36.659256);
+        track_talk.setText(mGetGudaoOfGpsPoint + "股道");
+        mRatioOfGpsTrackCar = String.valueOf(mGetGudaoOfGpsPoint);
+        Point3d point3d = new Point3d();
+        point3d.setX(101.768745);
+        point3d.setY(36.659256);
+        mGetRatioOfGpsPointCar = GetRatioOfGpsPoint(point3d, mGetGudaoOfGpsPoint);
+        Log.e("自测", mGetGudaoOfGpsPoint + "  " + mGetRatioOfGpsPointCar);*/
     }
 
     private Handler mHandler = new Handler();
@@ -1619,7 +1623,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 ControlTranslationsmall.proplrMove1(mPeople4, lianpeoplef, mRatioOfGpsTrackCar04, mGpsPistanceCar04, 20, 18);
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
-                if (mMControlMapName.equals("zhu")) {
+                if (mMControlMapName.equals("zheng")) {
                     xiningbeimapsmall.setVisibility(View.VISIBLE);
                     changfengmapsmall.setVisibility(View.GONE);
                     bailimapsmall.setVisibility(View.GONE);
@@ -1845,9 +1849,32 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         io = true;
         try {
             Pocket strbean = JSONArray.parseObject(s, Pocket.class);//将数据流整合成包
-            Log.e("", "" + strbean.getType());
+            Log.e("解析原始数据", strbean.getDataMessage() + "  " + strbean.getPeopleId() + "  " + strbean.getType());
             switch (strbean.getType()) {
+                case "TestData":
+                    dataDao.add("oneParkcar", "1", "", "", 20);
+                    dataDao.add("oneParkcar", "1", "", "", 30);
+                    dataDao.add("sixParkcar", "6", "", "", 0);
+                    dataDao.add("sixParkcar", "6", "", "", 30);
+                    dataDao.add("sixParkcar", "6", "", "", 50);
+                    dataDao.add("sixParkcar", "6", "", "", 60);
+                    dataDao.add("twelveParkcar", "12", "", "", 26);
+                    dataDao.add("twelveParkcar", "12", "", "", 46);
+                    dataDao.add("twelveParkcar", "12", "", "", 56);
+                    dataDao.add("twelveParkcar", "12", "", "", 76);
+                    dataDao.add("seventeenParkcar", "17", "", "", 60);
+                    dataDao.add("seventeenParkcar", "17", "", "", 70);
+                    dataDao.add("eighteenParkcar", "18", "", "", 10);
+                    dataDao.add("eighteenParkcar", "18", "", "", 50);
+                    break;
+                case "parkingCar":
+                    String dataMessage2 = strbean.getDataMessage();
+                    JSONObject testUser = JSONObject.parseObject(dataMessage2);
+                    TestUser t = JSONArray.parseObject(dataMessage2, TestUser.class);
+                    Log.e("解析数据", t.getCarNum() + "   " + t.getTrack());
+                    break;
                 case "DeleteDataBase":
+                    mVehicleCommander = 0;
                     ReadDatabase readDatabase = new ReadDatabase();
                     readDatabase.execute();
                     Intent in = new Intent("adjustment");
@@ -1908,7 +1935,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                             diaochez.setVisibility(View.GONE);
                                         }
                                     } else {
-                                        Log.e("fffff1", mTime0 + "  0");
                                         if (aaa == true) {
                                             if (mPeople0.getName().equals(mMControlMapName) && !mRatioOfGpsTrackCar20.equals("-1")) {
                                                 diaochez.setVisibility(View.VISIBLE);
@@ -1926,13 +1952,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                             mTime1 = 10;
                             //计算股道
                             int mGetGudaoOfGpsPoint01 = GetGudaoOfGpsPoint(b1, a1);
-                            Log.e("股道", "股道: " + mGetGudaoOfGpsPoint01 + " ");
                             mRatioOfGpsTrackCar01 = String.valueOf(mGetGudaoOfGpsPoint01);
                             Point3d point3d01 = new Point3d();
                             point3d01.setX(b1);
                             point3d01.setY(a1);
                             Double mGetRatioOfGpsPointCar01 = GetRatioOfGpsPoint(point3d01, mGetGudaoOfGpsPoint01);
-                            Log.e("机车运行轨迹：", mRatioOfGpsTrackCar01 + "  ：  " + mGetRatioOfGpsPointCar01);
 
                             DecimalFormat df101 = new DecimalFormat("#####0.00%");
                             DecimalFormatSymbols symbols01 = new DecimalFormatSymbols();
@@ -2306,6 +2330,22 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             alpha = another_data.split(",");
             System.out.println("-------------------" + alpha + "------------------2");
             //gousumit_list.add(alpha[4]);
+            Integer mVehicle = Integer.valueOf(alpha[4]);
+            String mCommander = mList.get(mVehicle - 1);
+            Log.e("调单", mCommander);
+            String[] mGouContent = mCommander.split(",");
+            String mSymbol = mGouContent[2];
+            String mNumber = mGouContent[3];
+            switch (mSymbol) {
+                case "+":
+                    Integer.valueOf(mNumber);
+                    mVehicleCommander += Integer.valueOf(mNumber);
+                    break;
+                case "-":
+                    mVehicleCommander -= Integer.valueOf(mNumber);
+                    break;
+            }
+            Log.e("调单", mVehicleCommander + "");
             UpdateDatabase updateDatabase = new UpdateDatabase();
             updateDatabase.execute();
         } else if (another_data.contains("JDLT") && another_data.contains(",")) {
@@ -2313,12 +2353,26 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             gouSplit = another_data.split(",");
             gouXiao = gouSplit[4];
             System.out.println("-------------------" + alpha + "------------------1");
-            alpha = another_data.split(",");
             System.out.println("-------------------" + alpha + "------------------2");
             //gousumit_list.add(alpha[4]);
-            String[] split = another_data.split(",");
-            if (split.length > 0) {
-                sTime = split[split.length - 1];
+            Integer mVehicle = Integer.valueOf(gouSplit[4]);
+            String mCommander = mList.get(mVehicle - 1);
+            Log.e("调单", mCommander);
+            String[] mGouContent = mCommander.split(",");
+            String mSymbol = mGouContent[2];
+            String mNumber = mGouContent[3];
+            switch (mSymbol) {
+                case "+":
+                    Integer.valueOf(mNumber);
+                    mVehicleCommander -= Integer.valueOf(mNumber);
+                    break;
+                case "-":
+                    mVehicleCommander += Integer.valueOf(mNumber);
+                    break;
+            }
+            Log.e("调单", mVehicleCommander + "");
+            if (gouSplit.length > 0) {
+                sTime = gouSplit[gouSplit.length - 1];
                 System.out.println("-------------------" + sTime + "------------------121212");
             }
             updateXiaoDatabase = new UpdateXiaoDatabase();
@@ -2378,7 +2432,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                         int length = split.length;
                         cur_dang.setText(length + "");
                     }
-                    mTopPosition = Integer.valueOf(alpha[4]) - 1;
+                    mTopPosition = Integer.valueOf(gouSplit[4]) - 1;
                     Intent in2 = new Intent("HookElimination");
                     in2.putExtra("name2", details);
                     sendBroadcast(in2);
@@ -2472,6 +2526,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 Integer[] mp3tingche = loadRaw(soundPool, this, R.raw.tingche);
                 soundIdMap.put(mp3tingche[0], mp3tingche[1]);
                 new PlayThread().run();*/
+                mControlLocation = false;
                 String replyTingChe = getReply(titlePosition, "71");
                 sendHexString(replyTingChe.replaceAll("\\s*", ""), "232");
                 break;
@@ -2532,6 +2587,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 /*Integer[] mp3tuijin = loadRaw(soundPool, this, R.raw.tuijin);
                 soundIdMap.put(mp3tuijin[0], mp3tuijin[1]);
                 new PlayThread().run();*/
+                mControlLocation = true;
                 String replyTuiJin = getReply(titlePosition, "43");
                 sendHexString(replyTuiJin.replaceAll("\\s*", ""), "232");
                 break;
@@ -3003,7 +3059,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     }
 
     int lingche_count = 0, shiche_index = 0;
-    int i = 0;
 
     //pe5//检测sql口
     private class IOReadThread extends Thread {
@@ -3257,5 +3312,126 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
         Log.d("tiwolf", "手机IP地址get the IpAddress--> " + hostIp + "");
         return hostIp;
+    }
+
+    private void distanceControl(String gd, Double getRatioOfGpsPointCar, String latCar, String lonCar) {
+        if (mControlLocation == true) {
+            mZhiList.clear();
+            switch (gd) {
+                case "1":
+                    mParkcar = parkDataDao.find("oneParkcar");
+                    break;
+                case "2":
+                    mParkcar = parkDataDao.find("twoParkcar");
+                    break;
+                case "3":
+                    mParkcar = parkDataDao.find("threeParkcar");
+                    break;
+                case "4":
+                    mParkcar = parkDataDao.find("fourParkcar");
+                    break;
+                case "5":
+                    mParkcar = parkDataDao.find("fiveParkcar");
+                    break;
+                case "6":
+                    mParkcar = parkDataDao.find("sixParkcar");
+                    break;
+                case "7":
+                    mParkcar = parkDataDao.find("sevenParkcar");
+                    break;
+                case "8":
+                    mParkcar = parkDataDao.find("eightParkcar");
+                    break;
+                case "9":
+                    mParkcar = parkDataDao.find("nineParkcar");
+                    break;
+                case "10":
+                    mParkcar = parkDataDao.find("tenParkcar");
+                    break;
+                case "11":
+                    mParkcar = parkDataDao.find("elevenParkcar");
+                    break;
+                case "12":
+                    mParkcar = parkDataDao.find("twelveParkcar");
+                    break;
+                case "13":
+                    mParkcar = parkDataDao.find("thirteenParkcar");
+                    break;
+                case "14":
+                    mParkcar = parkDataDao.find("fourteenParkcar");
+                    break;
+                case "15":
+                    mParkcar = parkDataDao.find("fifteenParkcar");
+                    break;
+                case "16":
+                    mParkcar = parkDataDao.find("sixteenParkcar");
+                    break;
+                case "17":
+                    mParkcar = parkDataDao.find("seventeenParkcar");
+                    break;
+                case "18":
+                    mParkcar = parkDataDao.find("eighteenParkcar");
+                    break;
+                case "19":
+                    mParkcar = parkDataDao.find("nineteenParkcar");
+                    break;
+            }
+            for (int j = 0; j < mParkcar.size(); j++) {
+                String ratioOfGpsPointCar = mParkcar.get(j).getRatioOfGpsPointCar();
+                mZhiList.add(Double.valueOf(ratioOfGpsPointCar));
+            }
+            int minIndex = ZhiIndex.getMinIndex(mZhiList);
+            int maxIndex = ZhiIndex.getMaxIndex(mZhiList);
+            Double minRatioOfGpsPointCar = Double.valueOf(mParkcar.get(minIndex).getRatioOfGpsPointCar());
+            String minLat = mParkcar.get(minIndex).getLat();
+            String minLon = mParkcar.get(minIndex).getLon();
+            Double maxRatioOfGpsPointCar = Double.valueOf(mParkcar.get(maxIndex).getRatioOfGpsPointCar());
+            String maxLat = mParkcar.get(maxIndex).getLat();
+            String maxLon = mParkcar.get(maxIndex).getLon();
+            Log.e("mZhiList", "mZhiList: " + maxIndex + "  " + minIndex);
+            distance(getRatioOfGpsPointCar, minRatioOfGpsPointCar, maxRatioOfGpsPointCar, latCar, lonCar, minLat, minLon, maxLat, maxLon);
+        }
+    }
+
+    private Double mDistanceDian, distance;
+
+    private void distance(double getRatioOfGpsPointCar, double minRatioOfGpsPointCar, double maxRatioOfGpsPointCar, String latCar, String lonCar, String minLat, String minLon, String maxLat, String maxLon) {
+        //计算两点的距离
+        if (getRatioOfGpsPointCar > minRatioOfGpsPointCar && getRatioOfGpsPointCar > maxRatioOfGpsPointCar) {
+            mDistanceDian = getDistance(Double.valueOf(maxLon), Double.valueOf(maxLat), Double.valueOf(latCar), Double.valueOf(lonCar));
+        } else if (getRatioOfGpsPointCar < minRatioOfGpsPointCar && getRatioOfGpsPointCar < maxRatioOfGpsPointCar) {
+            mDistanceDian = getDistance(Double.valueOf(minLon), Double.valueOf(minLat), Double.valueOf(latCar), Double.valueOf(lonCar));
+        }
+        distance = mDistanceDian - mVehicleCommander * 11;
+        Log.i("十五三一车", "西宁测试" + distance);
+        //十五三一车
+        if (distance > 55 && distance <= 121 && shi == false && wu == false && san == false) {
+            //十车
+            Log.i("十五三一车", "西宁测试十车");
+            shi = true;
+        } else if (distance > 55 && distance <= 66 && wu == false && san == false) {
+            //五车
+            Log.i("十五三一车", "西宁测试五车");
+            wu = true;
+            shi = true;
+        } else if (distance > 33 && distance <= 44 && san == false) {
+            //三车
+            Log.i("十五三一车", "西宁测试三车");
+            san = true;
+            wu = true;
+            shi = true;
+        } else if (distance <= 22 && san == false) {
+            //三车
+            Log.i("十五三一车", "西宁测试一车");
+            san = true;
+            wu = true;
+            shi = true;
+        }
+    }
+
+    public double getDistance(double lat1, double lon1, double lat2, double lon2) {
+        float[] results = new float[1];
+        Location.distanceBetween(lat1, lon1, lat2, lon2, results);
+        return results[0];
     }
 }
