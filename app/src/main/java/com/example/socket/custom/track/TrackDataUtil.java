@@ -509,7 +509,7 @@ public class TrackDataUtil {
 
         //长丰
         ArrayList<Point3d> array9 = new ArrayList<>();
-        Point3d nineTrack1 = new Point3d(9, 101.765878, 36.667509);
+        Point3d nineTrack1 = new Point3d(9, 101.765878, 36.667509);//头右边
         Point3d nineTrack2 = new Point3d(9, 101.765744, 36.667891);
         Point3d nineTrack3 = new Point3d(9, 101.765744, 36.667891);
         Point3d nineTrack4 = new Point3d(9, 101.765622, 36.668227);
@@ -526,7 +526,7 @@ public class TrackDataUtil {
         Point3d nineTrack15 = new Point3d(9, 101.764794, 36.670205);
         Point3d nineTrack16 = new Point3d(9, 101.764727, 36.670399);
         Point3d nineTrack17 = new Point3d(9, 101.764687, 36.670513);
-        Point3d nineTrack18 = new Point3d(9, 101.764652, 36.670616);
+        Point3d nineTrack18 = new Point3d(9, 101.764652, 36.670616);//弯点
         Point3d nineTrack19 = new Point3d(9, 101.764586, 36.670809);
         Point3d nineTrack20 = new Point3d(9, 101.764427, 36.671260);
         Point3d nineTrack21 = new Point3d(9, 101.764238, 36.671810);
@@ -569,7 +569,7 @@ public class TrackDataUtil {
 
         //长丰
         ArrayList<Point3d> array10 = new ArrayList<>();
-        Point3d tenTrack0 = new Point3d(10, 101.764644, 36.670582);
+        Point3d tenTrack0 = new Point3d(10, 101.764644, 36.670582);//弯道
         Point3d tenTrack1 = new Point3d(10, 101.764711, 36.670247);
         Point3d tenTrack2 = new Point3d(10, 101.764779, 36.669919);
         Point3d tenTrack3 = new Point3d(10, 101.764824, 36.669748);
@@ -610,7 +610,7 @@ public class TrackDataUtil {
         Point3d elevenTrack2 = new Point3d(11, 101.765243, 36.669477);
         Point3d elevenTrack3 = new Point3d(11, 101.765340, 36.669038);
         Point3d elevenTrack4 = new Point3d(11, 101.765192, 36.669709);
-        Point3d elevenTrack5 = new Point3d(11, 101.765144, 36.669958);
+        Point3d elevenTrack5 = new Point3d(11, 101.765144, 36.669958);//弯点
         Point3d elevenTrack6 = new Point3d(11, 101.765099, 36.670334);
         Point3d elevenTrack7 = new Point3d(11, 101.765100, 36.671014);
         Point3d elevenTrack8 = new Point3d(11, 101.765107, 36.671125);
@@ -651,13 +651,13 @@ public class TrackDataUtil {
         ArrayList<Point3d> array12 = new ArrayList<>();
         Point3d twelveTrack0 = new Point3d(12, 101.765122, 36.671352);
         Point3d twelveTrack1 = new Point3d(12, 101.765144, 36.671701);
-        Point3d twelveTrack2 = new Point3d(12, 101.765154, 36.671887);
+        Point3d twelveTrack2 = new Point3d(12, 101.765154, 36.671887);//弯点
         Point3d twelveTrack3 = new Point3d(12, 101.765157, 36.672073);
         Point3d twelveTrack4 = new Point3d(12, 101.765153, 36.672264);
         Point3d twelveTrack5 = new Point3d(12, 101.765139, 36.672473);
         Point3d twelveTrack6 = new Point3d(12, 101.765120, 36.672642);
-        Point3d twelveTrack7 = new Point3d(12, 101.765098, 36.672787);
-        Point3d twelveTrack8 = new Point3d(12, 101.765061, 36.672982);
+        Point3d twelveTrack7 = new Point3d(12, 101.765098, 36.672787);//正常
+        Point3d twelveTrack8 = new Point3d(12, 101.765061, 36.672982);//弯点
         Point3d twelveTrack9 = new Point3d(12, 101.765013, 36.673181);
         Point3d twelveTrack10 = new Point3d(12, 101.764986, 36.673283);
         Point3d twelveTrack11 = new Point3d(12, 101.764953, 36.673389);
@@ -742,7 +742,7 @@ public class TrackDataUtil {
         Point3d fourteenTrack4 = new Point3d(14, 101.762843, 36.674031);
         Point3d fourteenTrack5 = new Point3d(14, 101.762742, 36.674182);
         Point3d fourteenTrack6 = new Point3d(14, 101.762642, 36.674351);
-        Point3d fourteenTrack7 = new Point3d(14, 101.762475, 36.674707);
+        Point3d fourteenTrack7 = new Point3d(14, 101.762475, 36.674707);//弯点
         Point3d fourteenTrack8 = new Point3d(14, 101.762366, 36.675028);
         Point3d fourteenTrack9 = new Point3d(14, 101.762293, 36.675367);
         Point3d fourteenTrack10 = new Point3d(14, 101.762254, 36.675733);
@@ -765,7 +765,7 @@ public class TrackDataUtil {
 
         //百立
         ArrayList<Point3d> array15 = new ArrayList<>();
-        Point3d fifteenTrack0 = new Point3d(15, 101.768952, 36.658625);
+        Point3d fifteenTrack0 = new Point3d(15, 101.768952, 36.658625);//尾左边
         Point3d fifteenTrack1 = new Point3d(15, 101.768987, 36.658450);
         Point3d fifteenTrack2 = new Point3d(15, 101.769010, 36.658223);
         Point3d fifteenTrack3 = new Point3d(15, 101.769010, 36.658068);
@@ -775,7 +775,7 @@ public class TrackDataUtil {
         Point3d fifteenTrack7 = new Point3d(15, 101.768916, 36.657501);
         Point3d fifteenTrack8 = new Point3d(15, 101.768874, 36.657267);
         Point3d fifteenTrack9 = new Point3d(15, 101.768855, 36.656851);
-        Point3d fifteenTrack10 = new Point3d(15, 101.768865, 36.656712);
+        Point3d fifteenTrack10 = new Point3d(15, 101.768865, 36.656712);//弯点
         Point3d fifteenTrack11 = new Point3d(15, 101.768884, 36.656573);
         Point3d fifteenTrack12 = new Point3d(15, 101.769010, 36.656098);
         Point3d fifteenTrack13 = new Point3d(15, 101.769124, 36.655716);
@@ -810,7 +810,7 @@ public class TrackDataUtil {
         Point3d sixteenTrack2 = new Point3d(16, 101.770925, 36.649809);
         Point3d sixteenTrack3 = new Point3d(16, 101.770907, 36.649698);
         Point3d sixteenTrack4 = new Point3d(16, 101.770891, 36.649597);
-        Point3d sixteenTrack5 = new Point3d(16, 101.770868, 36.649435);
+        Point3d sixteenTrack5 = new Point3d(16, 101.770868, 36.649435);//弯点
         Point3d sixteenTrack6 = new Point3d(16, 101.770842, 36.649267);
         Point3d sixteenTrack7 = new Point3d(16, 101.770823, 36.649136);
         Point3d sixteenTrack8 = new Point3d(16, 101.770785, 36.648890);
@@ -835,7 +835,7 @@ public class TrackDataUtil {
 
         //物2
         ArrayList<Point3d> array17 = new ArrayList<>();
-        Point3d seventeenTrack0 = new Point3d(17, 101.769261, 36.657963);
+        Point3d seventeenTrack0 = new Point3d(17, 101.769261, 36.657963);//弯点
         Point3d seventeenTrack1 = new Point3d(17, 101.769393, 36.657590);
         Point3d seventeenTrack2 = new Point3d(17, 101.769640, 36.656890);
         Point3d seventeenTrack3 = new Point3d(17, 101.769784, 36.656460);
@@ -845,7 +845,7 @@ public class TrackDataUtil {
         Point3d seventeenTrack7 = new Point3d(17, 101.770952, 36.652646);
         Point3d seventeenTrack8 = new Point3d(17, 101.771034, 36.652266);
         Point3d seventeenTrack9 = new Point3d(17, 101.771045, 36.652158);
-        Point3d seventeenTrack10 = new Point3d(17, 101.771050, 36.652063);
+        Point3d seventeenTrack10 = new Point3d(17, 101.771050, 36.652063);//弯点
         Point3d seventeenTrack11 = new Point3d(17, 101.771040, 36.651640);
         Point3d seventeenTrack12 = new Point3d(17, 101.771018, 36.651148);
         Point3d seventeenTrack13 = new Point3d(17, 101.770977, 36.650195);
@@ -885,7 +885,7 @@ public class TrackDataUtil {
         ArrayList<Point3d> array18 = new ArrayList<>();
         Point3d eighteenTrack0 = new Point3d(18, 101.771138, 36.648882);
         Point3d eighteenTrack1 = new Point3d(18, 101.771163, 36.648812);
-        Point3d eighteenTrack2 = new Point3d(18, 101.771195, 36.648718);
+        Point3d eighteenTrack2 = new Point3d(18, 101.771195, 36.648718);//弯点
         Point3d eighteenTrack3 = new Point3d(18, 101.771226, 36.648625);
         Point3d eighteenTrack4 = new Point3d(18, 101.771256, 36.648514);
         Point3d eighteenTrack5 = new Point3d(18, 101.771285, 36.648389);
@@ -897,7 +897,7 @@ public class TrackDataUtil {
         Point3d eighteenTrack11 = new Point3d(18, 101.771437, 36.647672);
         Point3d eighteenTrack12 = new Point3d(18, 101.771461, 36.647560);
         Point3d eighteenTrack13 = new Point3d(18, 101.771487, 36.647434);
-        Point3d eighteenTrack14 = new Point3d(18, 101.771504, 36.647339);
+        Point3d eighteenTrack14 = new Point3d(18, 101.771504, 36.647339);//弯点
         Point3d eighteenTrack15 = new Point3d(18, 101.771519, 36.647226);
         Point3d eighteenTrack16 = new Point3d(18, 101.771532, 36.647115);
         Point3d eighteenTrack17 = new Point3d(18, 101.771539, 36.647025);

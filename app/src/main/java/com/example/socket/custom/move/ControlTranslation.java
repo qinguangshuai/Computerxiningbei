@@ -179,8 +179,8 @@ public class ControlTranslation {
                     v.setX((float) (450 - transverse - (75 - mGpsPistanceCar) * 6.12f));
                     v.setY(200 - disparity);
                 } else {
-                    v.setX((float) (150 - transverse + (25 - mGpsPistanceCar) * 2f));
-                    v.setY((float) (200 - disparity - (25 - mGpsPistanceCar) * 4f));
+                    v.setX((float) (150 - transverse - (25 - mGpsPistanceCar) * 2f));
+                    v.setY((float) (200 - disparity + (25 - mGpsPistanceCar) * 4f));
                 }
                 v.invalidate();
                 break;

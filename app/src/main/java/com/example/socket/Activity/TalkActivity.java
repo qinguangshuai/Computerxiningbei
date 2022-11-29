@@ -38,6 +38,7 @@ import android.widget.PopupWindow;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -150,11 +151,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private double mGetRatioOfGpsPointCar;
     public SpUtil mControlMap;
     private SpUtil mPeople0, mPeople1, mPeople2, mPeople3, mPeople4;
-    public static String mRatioOfGpsTrackCar20 = "0";
-    public static String mRatioOfGpsTrackCar01 = "0";
-    public static String mRatioOfGpsTrackCar02 = "0";
-    public static String mRatioOfGpsTrackCar03 = "0";
-    public static String mRatioOfGpsTrackCar04 = "0";
+    public static String mRatioOfGpsTrackCar20 = "-1";
+    public static String mRatioOfGpsTrackCar01 = "-1";
+    public static String mRatioOfGpsTrackCar02 = "-1";
+    public static String mRatioOfGpsTrackCar03 = "-1";
+    public static String mRatioOfGpsTrackCar04 = "-1";
     public static Double mGpsPistanceCar20 = 0.0;
     public static Double mGpsPistanceCar01 = 0.0;
     public static Double mGpsPistanceCar02 = 0.0;
@@ -275,7 +276,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 Log.e("弯点", "弯点b1: " + b1 + " ");
                                                 //计算股道
                                                 mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(b1, a1);
-                                                track_talk.setText(mGetGudaoOfGpsPoint);
+                                                track_talk.setText(mGetGudaoOfGpsPoint +"股道");
                                                 mRatioOfGpsTrackCar = String.valueOf(mGetGudaoOfGpsPoint);
                                                 Point3d point3d = new Point3d();
                                                 point3d.setX(b1);
