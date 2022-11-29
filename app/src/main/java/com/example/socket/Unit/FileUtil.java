@@ -1,11 +1,6 @@
 package com.example.socket.Unit;
 
 import android.util.Log;
-import android.view.View;
-import android.widget.Toast;
-
-import com.example.socket.MainActivity;
-import com.example.socket.R;
 
 import java.io.BufferedWriter;
 import java.io.File;

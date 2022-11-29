@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import com.example.socket.Activity.LoginActivity;
 import com.example.socket.Activity.SplashActivity;
 
 /**

@@ -78,9 +78,6 @@ public class UdpHelperServer {
             } else {
                 Log.e("swy", "UDP data receive :" + recvStr + ". Receive Ip: " + recvPacket.getAddress().getHostAddress());
             }
-
-//                    show.setText("收到: \t" + recvStr);
-
             //4.关闭连接
             ds.close();
         } catch (IOException e) {
@@ -114,10 +111,6 @@ public class UdpHelperServer {
                     }
                 }).start();
             }
-
-
-//                    show.setText("收到: \t" + recvStr);
-
             //4.关闭连接
             //ds.close();
         } catch (IOException e) {

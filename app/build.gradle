@@ -80,6 +80,7 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.9.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.9.0'
     implementation project(path: ':SerialportLibrary')
-    //implementation 'com.tencent.bugly:crashreport:latest.release'
+    implementation 'com.tencent.bugly:crashreport:latest.release'
     //implementation 'cat.ereza:customactivityoncrash:2.3.0'
+    implementation 'com.jakewharton:process-phoenix:2.0.0'
 }
