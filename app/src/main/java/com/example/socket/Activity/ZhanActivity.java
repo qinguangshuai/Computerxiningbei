@@ -106,6 +106,12 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
         mPeopletwo = findViewById(R.id.peobigtw);
         mPeoplethree = findViewById(R.id.peobigth);
         mPeoplefour = findViewById(R.id.peobigf);
+
+        mTransferpeople.setVisibility(View.GONE);
+        mPeopleone.setVisibility(View.GONE);
+        mPeopletwo.setVisibility(View.GONE);
+        mPeoplethree.setVisibility(View.GONE);
+        mPeoplefour.setVisibility(View.GONE);
         //停留车控件
         mOneParkCar = findViewById(R.id.oneParkCar);
         mTwoParkCar = findViewById(R.id.twoParkCar);
@@ -220,7 +226,7 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
             mBailimap.setVisibility(View.VISIBLE);
             bailiPark();
         }
-
+        Log.e("chuan：", mMControlMapName + "  ：  " + TalkActivity.mRatioOfGpsTrackCar20 + "        ");
         if (mPeople0.getName().equals(mMControlMapName) && !TalkActivity.mRatioOfGpsTrackCar20.equals("-1")) {
             mTransferpeople.setVisibility(View.VISIBLE);
         } else {
@@ -241,6 +247,7 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
         } else {
             mPeoplethree.setVisibility(View.GONE);
         }
+        Log.e("chuan4：", mMControlMapName + "  ：  " + TalkActivity.mRatioOfGpsTrackCar04 + "        ");
         if (mPeople4.getName().equals(mMControlMapName) && !TalkActivity.mRatioOfGpsTrackCar04.equals("-1")) {
             mPeoplefour.setVisibility(View.VISIBLE);
         } else {

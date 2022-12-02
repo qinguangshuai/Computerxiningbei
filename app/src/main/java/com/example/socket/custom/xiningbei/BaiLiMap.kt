@@ -66,7 +66,7 @@ class BaiLiMap(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
                     550F,
                     mPaint
             )
-            canvas?.drawText("百立专用线", 550F,530F, paint)
+            canvas?.drawText("百立专用线", 550F,545F, paint)
             //物资局专用线
             canvas?.drawLine(
                     50F,

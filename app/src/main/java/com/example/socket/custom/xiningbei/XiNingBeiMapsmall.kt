@@ -240,7 +240,7 @@ class XiNingBeiMapsmall(context: Context?, attrs: AttributeSet?) : View(context,
                     height.toFloat() / 12 * 10,
                     mPaint
             )
-            canvas?.drawText("长丰专用线", (width.toFloat() / 8).toFloat(), height.toFloat() / 12 * 10 + 15, paint)
+            canvas?.drawText("长丰专用线", (width.toFloat() / 8).toFloat(), height.toFloat() / 12 * 10 + 17, paint)
             //1道中间  width ((width.toFloat()/8*1.5).toFloat() = 192.0     width.toFloat()/8*12 = 256.0)
             canvas?.drawLine(
                     (width.toFloat() / 8 * 1.5).toFloat(),
@@ -298,24 +298,6 @@ class XiNingBeiMapsmall(context: Context?, attrs: AttributeSet?) : View(context,
                     height.toFloat() / 12 * 6,
                     paint1
             )
-            canvas?.drawText(
-                    "平",
-                    (canvas.width / 8.4 * 2.15).toFloat(),
-                    (height.toFloat() / 12 * 3 + 15).toFloat(),
-                    paint1
-            )
-            canvas?.drawText(
-                    "过",
-                    (canvas.width / 8.4 * 2.15).toFloat(),
-                    (height.toFloat() / 12 * 3.5 + 15).toFloat(),
-                    paint1
-            )
-            canvas?.drawText(
-                    "道",
-                    (canvas.width / 8.4 * 2.15).toFloat(),
-                    (height.toFloat() / 12 * 4 + 15).toFloat(),
-                    paint1
-            )
             canvas?.drawLine(
                     (canvas.width / 8 * 5.3).toFloat(),
                     (height.toFloat() / 12 * 1.1).toFloat(),
@@ -328,24 +310,6 @@ class XiNingBeiMapsmall(context: Context?, attrs: AttributeSet?) : View(context,
                     (height.toFloat() / 12 * 1.1).toFloat(),
                     (canvas.width / 8 * 5.5).toFloat(),
                     height.toFloat() / 12 * 6,
-                    paint1
-            )
-            canvas?.drawText(
-                    "平",
-                    (canvas.width / 8.1 * 5.35).toFloat(),
-                    (height.toFloat() / 12 * 3 + 15).toFloat(),
-                    paint1
-            )
-            canvas?.drawText(
-                    "过",
-                    (canvas.width / 8.1 * 5.35).toFloat(),
-                    (height.toFloat() / 12 * 3.5 + 15).toFloat(),
-                    paint1
-            )
-            canvas?.drawText(
-                    "道",
-                    (canvas.width / 8.1 * 5.35).toFloat(),
-                    (height.toFloat() / 12 * 4 + 15).toFloat(),
                     paint1
             )
         }

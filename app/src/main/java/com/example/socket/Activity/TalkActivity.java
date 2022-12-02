@@ -155,7 +155,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private Double mGpsPistanceCar = 0.0;
     private double mGetRatioOfGpsPointCar;
     public SpUtil mControlMap;
-    private TopViewjiche train;
     private SpUtil mPeople0, mPeople1, mPeople2, mPeople3, mPeople4;
     public static String mRatioOfGpsTrackCar20 = "-1";
     public static String mRatioOfGpsTrackCar01 = "-1";
@@ -167,11 +166,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public static Double mGpsPistanceCar02 = 0.0;
     public static Double mGpsPistanceCar03 = 0.0;
     public static Double mGpsPistanceCar04 = 0.0;
-    private TopViewdiaochezhang diaochez;
-    private TopViewlian1 lianpeopleo;
-    private TopViewlian2 lianpeopletw;
-    private TopViewlian3 lianpeopleth;
-    private TopViewlian4 lianpeoplef;
+    public static int gouName;
+    public static String switchType;
+    public static String switchTime;
+    private FileUtil fileUtil;
+    private boolean lingClear = false;
     private Handler mhandler1;
     private Handler mhandler0;
     private Handler mhandler2;
@@ -179,14 +178,15 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private Handler mhandler4;
     private String gouName1;
     private static int gouN;
-    public static int gouName;
-    public static String switchType;
-    public static String switchTime;
-    private FileUtil fileUtil;
-    private boolean lingClear = false;
-    private ChangFengMapsmall changfengmapsmall;
-    private BaiLiMapsmall bailimapsmall;
-    private XiNingBeiMapsmall xiningbeimapsmall;
+    private TopViewjiche train;
+    private TopViewdiaochezhang diaochez;
+    private TopViewlian1 lianpeopleo;
+    private TopViewlian2 lianpeopletw;
+    private TopViewlian3 lianpeopleth;
+    private TopViewlian4 lianpeoplef;
+    private BaiLiMapsmall mBailimapsmall;
+    private XiNingBeiMapsmall mXiningbeimapsmall;
+    private ChangFengMapsmall mChangfengmapsmall;
     boolean mControlLocation = false;
     private List<Double> mZhiList = new ArrayList<>();
     private ParkDataDao dataDao;
@@ -1609,9 +1609,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         lianpeopleth.setVisibility(View.GONE);
         lianpeoplef.setVisibility(View.GONE);
 
-        changfengmapsmall = customView.findViewById(R.id.changfengmapsmall);
-        bailimapsmall = customView.findViewById(R.id.bailimapsmall);
-        xiningbeimapsmall = customView.findViewById(R.id.xiningbeimapsmall);
+        mChangfengmapsmall = customView.findViewById(R.id.changfengmapsmall);
+        mBailimapsmall = customView.findViewById(R.id.bailimapsmall);
+        mXiningbeimapsmall = customView.findViewById(R.id.xiningbeimapsmall);
 
         Log.e("chua", mRatioOfGpsTrackCar + "   " + mGpsPistanceCar + "    " + mControlMap + "     ");
         aaa = true;
@@ -1629,17 +1629,17 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 mMControlMapName = mControlMap.getName();
                 Log.e("showPopwindow: ", mMControlMapName);
                 if (mMControlMapName.equals("zheng")) {
-                    xiningbeimapsmall.setVisibility(View.VISIBLE);
-                    changfengmapsmall.setVisibility(View.GONE);
-                    bailimapsmall.setVisibility(View.GONE);
+                    mXiningbeimapsmall.setVisibility(View.VISIBLE);
+                    mChangfengmapsmall.setVisibility(View.GONE);
+                    mBailimapsmall.setVisibility(View.GONE);
                 } else if (mMControlMapName.equals("cf")) {
-                    xiningbeimapsmall.setVisibility(View.GONE);
-                    changfengmapsmall.setVisibility(View.VISIBLE);
-                    bailimapsmall.setVisibility(View.GONE);
+                    mXiningbeimapsmall.setVisibility(View.GONE);
+                    mChangfengmapsmall.setVisibility(View.VISIBLE);
+                    mBailimapsmall.setVisibility(View.GONE);
                 } else {
-                    xiningbeimapsmall.setVisibility(View.GONE);
-                    changfengmapsmall.setVisibility(View.GONE);
-                    bailimapsmall.setVisibility(View.VISIBLE);
+                    mXiningbeimapsmall.setVisibility(View.GONE);
+                    mChangfengmapsmall.setVisibility(View.GONE);
+                    mBailimapsmall.setVisibility(View.VISIBLE);
                 }
                 handlerPop.postDelayed(this, 1000);
             }
@@ -1956,11 +1956,13 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                             mTime1 = 10;
                             //计算股道
                             int mGetGudaoOfGpsPoint01 = GetGudaoOfGpsPoint(b1, a1);
+                            Log.e("股道", "股道: " + mGetGudaoOfGpsPoint01 + " ");
                             mRatioOfGpsTrackCar01 = String.valueOf(mGetGudaoOfGpsPoint01);
                             Point3d point3d01 = new Point3d();
                             point3d01.setX(b1);
                             point3d01.setY(a1);
                             Double mGetRatioOfGpsPointCar01 = GetRatioOfGpsPoint(point3d01, mGetGudaoOfGpsPoint01);
+                            Log.e("机车运行轨迹：", mRatioOfGpsTrackCar01 + "  ：  " + mGetRatioOfGpsPointCar01);
 
                             DecimalFormat df101 = new DecimalFormat("#####0.00%");
                             DecimalFormatSymbols symbols01 = new DecimalFormatSymbols();

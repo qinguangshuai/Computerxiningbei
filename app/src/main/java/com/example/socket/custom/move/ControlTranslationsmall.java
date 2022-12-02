@@ -93,7 +93,7 @@ public class ControlTranslationsmall {
                     v.setX((float) (81 / 1.7 - transverse + mGpsPistanceCar / 1.7 * 8.65f));
                     v.setY((float) (250 / 1.7  + disparity + 5));
                 } else {
-                    v.setX((float) (799 / 1.7 - transverse + 12 + (mGpsPistanceCar - 83) / 1.7 * 7.53f));
+                    v.setX((float) (760 / 1.7 - transverse  + (mGpsPistanceCar - 83) / 1.7 * 7.53f));
                     v.setY((float) (250 / 1.7 + disparity + 5 + (mGpsPistanceCar - 83) / 1.7 * 8.82f));
                 }
                 v.invalidate();
@@ -110,7 +110,7 @@ public class ControlTranslationsmall {
                     v.setX((float) (205 / 1.7 - transverse + (mGpsPistanceCar - 20) / 1.7 * 9.71f));
                     v.setY((float) (150 / 1.7 + disparity));
                 } else {
-                    v.setX((float) (768 / 1.7 - transverse + (mGpsPistanceCar - 78) / 1.7 * 2.91f));
+                    v.setX((float) (760 / 1.7 - transverse + (mGpsPistanceCar - 78) / 1.7 * 2.90f));
                     v.setY((float) (150 / 1.7 + disparity + (mGpsPistanceCar - 78) / 1.7 * 7.95f));
                 }
                 v.invalidate();
@@ -121,14 +121,14 @@ public class ControlTranslationsmall {
                 s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 21) {
-                    v.setX((float) (230 / 1.7 - transverse + 3 + mGpsPistanceCar / 1.7 * 3.67f));
+                    v.setX((float) (238 / 1.7 - transverse + mGpsPistanceCar / 1.7 * 3.67f));
                     v.setY((float) (150 / 1.7 + disparity - 5 - mGpsPistanceCar / 1.7 * 4.76f));
                 } else if (mGpsPistanceCar > 21 && mGpsPistanceCar <= 76) {
-                    v.setX((float) (307 / 1.7 - transverse + 3 + (mGpsPistanceCar - 21) / 1.7 * 6.05f));
-                    v.setY((float) (50 / 1.7 + disparity - 5));
+                    v.setX((float) (315 / 1.7 - transverse + (mGpsPistanceCar - 21) / 1.7 * 6.05f));
+                    v.setY((float) (60 / 1.7 + disparity ));
                 } else {
-                    v.setX((float) (640 / 1.7 - transverse + 3 + (mGpsPistanceCar - 76) / 1.7 * 5.33f));
-                    v.setY((float) (50 / 1.7 + disparity - 5 + (mGpsPistanceCar - 76) / 1.7 * 4.17f));
+                    v.setX((float) (630 / 1.7 - transverse + (mGpsPistanceCar - 76) / 1.7 * 5.33f));
+                    v.setY((float) (50 / 1.7 + disparity  + (mGpsPistanceCar - 76) / 1.7 * 4.17f));
                 }
                 v.invalidate();
                 break;
@@ -178,8 +178,8 @@ public class ControlTranslationsmall {
                     v.setX((float) (450 / 1.7 - transverse - (75 - mGpsPistanceCar) / 1.7 * 6.12f));
                     v.setY((float) (200 / 1.7 + disparity));
                 } else {
-                    v.setX((float) (150 / 1.7 - transverse + (25 - mGpsPistanceCar) / 1.7 * 2f));
-                    v.setY((float) (200 / 1.7 + disparity - (25 - mGpsPistanceCar) / 1.7 * 4f));
+                    v.setX((float) (150 / 1.7 - transverse - (25 - mGpsPistanceCar) / 1.7 * 2f));
+                    v.setY((float) (200 / 1.7 + disparity + (25 - mGpsPistanceCar) / 1.7 * 4f));
                 }
                 v.invalidate();
                 break;
