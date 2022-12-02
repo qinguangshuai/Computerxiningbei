@@ -37,6 +37,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -145,7 +146,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private ListDatabase listDatabase;
     private TextView curDanhao;
     private Typeface fromAsset;
-    private Pocket pocket;
+    private Pocket pocket = null;
     public static PopupWindow popWindow;
     private static final int REQUEST_SELECT_DEVICE = 1;
     private int mGetGudaoOfGpsPoint = 0;
@@ -191,6 +192,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private ParkDataDao dataDao;
     private ParkDataDao parkDataDao;
     private List<ParkDataUser> mParkcar;
+    private boolean controlYiChe = false;
 
     private void sendMessage(String msg, Pocket p) {
         p.setDataMessage(msg);
@@ -310,8 +312,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 String gpsPoint = ratioOfGpsPoint.substring(0, ratioOfGpsPoint.indexOf("."));
                                                 mGpsPistanceCar = Double.valueOf(gpsPoint);
                                                 EventBus.getDefault().post(new ZhanchangWrap(mRatioOfGpsTrackCar, mGpsPistanceCar));
-                                                //计算十五三车
-                                                distanceControl("1", mGetRatioOfGpsPointCar, lat, lon);
+
+                                                Log.e("测试", trackNumber);//计算十五三车
+                                                distanceControl(trackNumber, mGetRatioOfGpsPointCar, lat, lon);
                                             }
                                         }
                                     } else {
@@ -395,10 +398,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                     //sendMessage(mConversationId, totalDmr);
                                     //mAdvancedmr.setName("false");
                                     //停车
+                                    yi = false;
                                     san = false;
                                     wu = false;
                                     shi = false;
-                                    yi = false;
                                     lingClear = false;
                                     sendMessage("tingche", pocket);
                                     break;
@@ -903,10 +906,13 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     public String mName;
     private DetailAdapter detailAdapter;
     private String gouTotal;
+    private String trackNumber = "0";
 
     //调单显示方法
     public void DisplayDiaodanLayout(String str, String gouNumber, String mTime) {
         Log.e("swy", str);
+        String trackPark = null;
+        String stringPark = null;
         mList = new ArrayList<>();
         ArrayList<String> diaocan_list = new ArrayList<>();
         try {
@@ -916,6 +922,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             for (int i = 0; i < Integer.valueOf(diaocan_list.get(2)); i++) {
                 mList.add(i + 1 + "," + diaocan_list.get(13 + (i * 3)) + "," + diaocan_list.get(14 + (i * 3)).substring(0, 1) + "," + diaocan_list.get(14 + (i * 3)).substring(1) + "," + diaocan_list.get(15 + (i * 3)));//红色 #FF0000 //牡丹红 #FF00FF
             }
+            Log.e("调单显示方法", mList.size() + "");
             gouTotal = diaocan_list.get(2);
             //设置layoutmanager
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -946,21 +953,18 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 
             if (gouNumber.equals("")) {
                 cur_dang.setText("0");
-                /*String mVehicle = mList.get(0);
-                Log.e("0001",mVehicle+"");
-                String[] mCommander = mVehicle.split(",");
-                switch (mCommander[2]) {
-                    case "+":
-                        Integer integer = Integer.valueOf(mCommander[3]);
-                        break;
-                    case "-":
-
-                        break;
-                }*/
+                trackPark = mList.get(0);
+                stringPark = trackPark.split(",")[1].substring(0, trackPark.split(",")[1].indexOf("道"));
+                trackNumber = stringPark;
+                Log.e("调单显示方法", trackPark + "  " + stringPark + "  " + trackNumber);
             } else {
                 String[] split = gouNumber.split("-");
                 int length = split.length;
                 cur_dang.setText(length + "");
+                trackPark = mList.get(length);
+                stringPark = trackPark.split(",")[1].substring(0, trackPark.split(",")[1].indexOf("道"));
+                trackNumber = stringPark;
+                Log.e("调单显示方法", trackPark + "  " + stringPark + "  " + trackNumber);
             }
             detailAdapter.notifyDataSetChanged();
             cur_recy.setAdapter(detailAdapter);
@@ -1157,6 +1161,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 DiaoDanDatabase.class, "Diaodan_Database")
                 .fallbackToDestructiveMigration()
                 .build();
+        trackNumber = "0";
 
         mStartHandler.sendEmptyMessageDelayed(0, 1000);
         parkDataDao = new ParkDataDao(TalkActivity.this);
@@ -1332,12 +1337,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         initRecord();
         initMic();
 
-        /*mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(101.768745,36.659256);
+        /*mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(101.767853,36.661936);
         track_talk.setText(mGetGudaoOfGpsPoint + "股道");
         mRatioOfGpsTrackCar = String.valueOf(mGetGudaoOfGpsPoint);
         Point3d point3d = new Point3d();
-        point3d.setX(101.768745);
-        point3d.setY(36.659256);
+        point3d.setX(101.767853);
+        point3d.setY(36.661936);
         mGetRatioOfGpsPointCar = GetRatioOfGpsPoint(point3d, mGetGudaoOfGpsPoint);
         Log.e("自测", mGetGudaoOfGpsPoint + "  " + mGetRatioOfGpsPointCar);*/
     }
@@ -1851,21 +1856,19 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             Pocket strbean = JSONArray.parseObject(s, Pocket.class);//将数据流整合成包
             Log.e("解析原始数据", strbean.getDataMessage() + "  " + strbean.getPeopleId() + "  " + strbean.getType());
             switch (strbean.getType()) {
-                case "TestData":
-                    dataDao.add("oneParkcar", "1", "", "", 20);
-                    dataDao.add("oneParkcar", "1", "", "", 30);
-                    dataDao.add("sixParkcar", "6", "", "", 0);
-                    dataDao.add("sixParkcar", "6", "", "", 30);
-                    dataDao.add("sixParkcar", "6", "", "", 50);
-                    dataDao.add("sixParkcar", "6", "", "", 60);
-                    dataDao.add("twelveParkcar", "12", "", "", 26);
-                    dataDao.add("twelveParkcar", "12", "", "", 46);
-                    dataDao.add("twelveParkcar", "12", "", "", 56);
-                    dataDao.add("twelveParkcar", "12", "", "", 76);
-                    dataDao.add("seventeenParkcar", "17", "", "", 60);
-                    dataDao.add("seventeenParkcar", "17", "", "", 70);
-                    dataDao.add("eighteenParkcar", "18", "", "", 10);
-                    dataDao.add("eighteenParkcar", "18", "", "", 50);
+                case "AddYiChe":
+                    controlYiChe = true;
+                    break;
+                case "RemoveYiChe":
+                    controlYiChe = false;
+                    break;
+                case "AutomaticBroadcasting":
+                    dataDao.add("oneParkcar", "1", "101.767744", "36.662079", 61);
+                    dataDao.add("oneParkcar", "1", "101.767793", "36.661938", 70);
+                    dataDao.add("twoParkcar", "2", "101.767799", "36.662089", 50);
+                    dataDao.add("twoParkcar", "2", "101.767853", "36.661936", 62);
+                    dataDao.add("sevenParkcar", "7", "101.767853", "36.661936", 50);
+                    dataDao.add("sevenParkcar", "7", "101.767853", "36.661936", 62);
                     break;
                 case "parkingCar":
                     String dataMessage2 = strbean.getDataMessage();
@@ -1875,6 +1878,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     break;
                 case "DeleteDataBase":
                     mVehicleCommander = 0;
+                    trackNumber = "0";
                     ReadDatabase readDatabase = new ReadDatabase();
                     readDatabase.execute();
                     Intent in = new Intent("adjustment");
@@ -2307,23 +2311,23 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             dateString = another_data.substring(14, 26);//调单时间
             diaohaoReceiver = another_data.substring(40, 42);//调号
             danhao = another_data.substring(44, 46);
-            if (combineCommend.CRC_Test(input)) {
-                InsertDatabase addDatabase = new InsertDatabase();
-                addDatabase.execute();
-            } else {
-                if (pocket == null) {
-                    pocket = new Pocket();
-                }
-                pocket.setTime(System.currentTimeMillis());
-                pocket.setIpAdress(TalkActivity.benJi);
-                pocket.setDataMessage(diaohaoReceiver + "," + danhao + "," + dateString);
-                pocket.setGroup(group);
-                pocket.setUserCode(hao);
-                pocket.setGjhId(mGjhId);
-                pocket.setPeopleId(TalkActivity.peopleId);
-                pocket.setType("OrderAdjustmentReply");
-                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
-            }
+            //if (combineCommend.CRC_Test(input)) {
+            InsertDatabase addDatabase = new InsertDatabase();
+            addDatabase.execute();
+            //} else {
+//                if (pocket == null) {
+//                    pocket = new Pocket();
+//                }
+//                pocket.setTime(System.currentTimeMillis());
+//                pocket.setIpAdress(TalkActivity.benJi);
+//                pocket.setDataMessage(diaohaoReceiver + "," + danhao + "," + dateString);
+//                pocket.setGroup(group);
+//                pocket.setUserCode(hao);
+//                pocket.setGjhId(mGjhId);
+//                pocket.setPeopleId(TalkActivity.peopleId);
+//                pocket.setType("OrderAdjustmentReply");
+//                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+//            }
 
         } else if (another_data.contains("BJXT") && another_data.contains(",")) {
             System.out.println("-------------------" + alpha + "------------------1");
@@ -2494,6 +2498,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             //List<DiaoDan> users = db.DiaodanDAO().findByTime();
             //String detailsDan = users.get(0).getStr();
             db.DiaodanDAO().deleteStr(detailsDan);
+            trackNumber = "0";
             return "";
         }
 
@@ -2573,6 +2578,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 /*Integer[] mp3lianjie = loadRaw(soundPool, this, R.raw.lianjie);
                 soundIdMap.put(mp3lianjie[0], mp3lianjie[1]);
                 new PlayThread().run();*/
+                mControlLocation = true;
                 String replyLianJie = getReply(titlePosition, "45");
                 sendHexString(replyLianJie.replaceAll("\\s*", ""), "232");
                 break;
@@ -2580,6 +2586,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 /*Integer[] mp3liufang = loadRaw(soundPool, this, R.raw.liufang);
                 soundIdMap.put(mp3liufang[0], mp3liufang[1]);
                 new PlayThread().run();*/
+                mControlLocation = true;
                 String replyLiuFang = getReply(titlePosition, "47");
                 sendHexString(replyLiuFang.replaceAll("\\s*", ""), "232");
                 break;
@@ -3320,62 +3327,86 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             switch (gd) {
                 case "1":
                     mParkcar = parkDataDao.find("oneParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "2":
                     mParkcar = parkDataDao.find("twoParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "3":
                     mParkcar = parkDataDao.find("threeParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "4":
                     mParkcar = parkDataDao.find("fourParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "5":
                     mParkcar = parkDataDao.find("fiveParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "6":
                     mParkcar = parkDataDao.find("sixParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "7":
                     mParkcar = parkDataDao.find("sevenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "8":
                     mParkcar = parkDataDao.find("eightParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "9":
                     mParkcar = parkDataDao.find("nineParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "10":
                     mParkcar = parkDataDao.find("tenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "11":
                     mParkcar = parkDataDao.find("elevenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "12":
                     mParkcar = parkDataDao.find("twelveParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "13":
                     mParkcar = parkDataDao.find("thirteenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "14":
                     mParkcar = parkDataDao.find("fourteenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "15":
                     mParkcar = parkDataDao.find("fifteenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "16":
                     mParkcar = parkDataDao.find("sixteenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "17":
                     mParkcar = parkDataDao.find("seventeenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "18":
                     mParkcar = parkDataDao.find("eighteenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
                 case "19":
                     mParkcar = parkDataDao.find("nineteenParkcar");
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
                     break;
             }
+        }
+    }
+
+    private void Parkcar(Double getRatioOfGpsPointCar, String latCar, String lonCar) {
+        if (mParkcar.size() > 0) {
             for (int j = 0; j < mParkcar.size(); j++) {
                 String ratioOfGpsPointCar = mParkcar.get(j).getRatioOfGpsPointCar();
                 mZhiList.add(Double.valueOf(ratioOfGpsPointCar));
@@ -3396,6 +3427,16 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private Double mDistanceDian, distance;
 
     private void distance(double getRatioOfGpsPointCar, double minRatioOfGpsPointCar, double maxRatioOfGpsPointCar, String latCar, String lonCar, String minLat, String minLon, String maxLat, String maxLon) {
+        if (pocket == null) {
+            pocket = new Pocket();
+        }
+        pocket.setTime(System.currentTimeMillis());
+        pocket.setIpAdress(benJi);
+        pocket.setImei(imei);
+        pocket.setPeopleId(peopleId);
+        pocket.setUserCode(hao);
+        pocket.setGjhId("");
+        pocket.setType("AutomaticBroadcasting");
         //计算两点的距离
         if (getRatioOfGpsPointCar > minRatioOfGpsPointCar && getRatioOfGpsPointCar > maxRatioOfGpsPointCar) {
             mDistanceDian = getDistance(Double.valueOf(maxLon), Double.valueOf(maxLat), Double.valueOf(latCar), Double.valueOf(lonCar));
@@ -3405,27 +3446,38 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         distance = mDistanceDian - mVehicleCommander * 11;
         Log.i("十五三一车", "西宁测试" + distance);
         //十五三一车
-        if (distance > 55 && distance <= 121 && shi == false && wu == false && san == false) {
+        if (distance > 66 && distance <= 121 && shi == false && wu == false && san == false) {
             //十车
             Log.i("十五三一车", "西宁测试十车");
             shi = true;
+            pocket.setDataMessage("十车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
         } else if (distance > 55 && distance <= 66 && wu == false && san == false) {
             //五车
             Log.i("十五三一车", "西宁测试五车");
             wu = true;
             shi = true;
+            pocket.setDataMessage("五车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
         } else if (distance > 33 && distance <= 44 && san == false) {
             //三车
             Log.i("十五三一车", "西宁测试三车");
             san = true;
             wu = true;
             shi = true;
-        } else if (distance <= 22 && san == false) {
-            //三车
+            pocket.setDataMessage("三车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+        } else if (distance <= 22 && yi == false) {
+            //一车
             Log.i("十五三一车", "西宁测试一车");
+            yi = true;
             san = true;
             wu = true;
             shi = true;
+            if (controlYiChe == true) {
+                pocket.setDataMessage("一车");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            }
         }
     }
 
