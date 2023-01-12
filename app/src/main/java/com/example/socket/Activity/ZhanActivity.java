@@ -135,8 +135,8 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
 
         aaa = true;
         ParkDataDao dataDao = new ParkDataDao(this);
-        dataDao.add("oneParkcar","1","101.767744","36.662079",61);
-        dataDao.add("oneParkcar","1","101.767793","36.661938",62);
+//        dataDao.add("oneParkcar","1","101.767744","36.662079",61);
+//        dataDao.add("oneParkcar","1","101.767793","36.661938",62);
 //        dataDao.add("twelveParkcar","1","","","26");
 //        dataDao.add("twelveParkcar","1","","","46");
 //        dataDao.add("twelveParkcar","1","","","56");

@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.telephony.TelephonyManager;
@@ -193,6 +194,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private ParkDataDao parkDataDao;
     private List<ParkDataUser> mParkcar;
     private boolean controlYiChe = false;
+    private boolean mJieShiChe = false;
+    private boolean mJieWuChe = false;
+    private boolean mJieSanChe = false;
+    private boolean mJieYiChe = false;
 
     private void sendMessage(String msg, Pocket p) {
         p.setDataMessage(msg);
@@ -398,6 +403,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                     //sendMessage(mConversationId, totalDmr);
                                     //mAdvancedmr.setName("false");
                                     //停车
+                                    mJieShiChe = false;
+                                    mJieWuChe = false;
+                                    mJieSanChe = false;
+                                    mJieYiChe = false;
                                     yi = false;
                                     san = false;
                                     wu = false;
@@ -415,25 +424,35 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                 case "27":
                                     //sendMessage(mConversationId, totalDmr);
                                     //qidong();
+                                    mJieShiChe = true;
                                     sendMessage("shiche", pocket);
                                     break;
                                 //五车
                                 case "25":
                                     //sendMessage(mConversationId, totalDmr);
                                     //qidong();
-                                    pocket.setDataMessage("wuche");
+                                    mJieShiChe = true;
+                                    mJieWuChe = true;
+//                                    pocket.setDataMessage("wuche");
                                     sendMessage("wuche", pocket);
                                     break;
                                 //三车
                                 case "23":
                                     //sendMessage(mConversationId, totalDmr);
                                     //qidong();
+                                    mJieShiChe = true;
+                                    mJieWuChe = true;
+                                    mJieSanChe = true;
                                     sendMessage("sanche", pocket);
                                     break;
                                 //一车
                                 case "26":
                                     //sendMessage(mConversationId, totalDmr);
                                     //qidong();
+                                    mJieShiChe = true;
+                                    mJieWuChe = true;
+                                    mJieSanChe = true;
+                                    mJieYiChe = true;
                                     sendMessage("yiche", pocket);
                                     break;
                                 //连接
@@ -475,10 +494,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                 case "75":
                                     //sendMessage(mConversationId, totalDmr);
                                     //qidong();
-                                    //if (jinji == 1) {
-                                    //jinji++;
-                                    sendMessage("jiesuo", pocket);
-                                    //}
+                                    if (jinji == 1) {
+                                        jinji++;
+                                        sendMessage("jiesuo", pocket);
+                                    }
                                     mUrgentState.setName("9");
                                     mUrgentState.setStandard("");
                                     break;
@@ -911,8 +930,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     //调单显示方法
     public void DisplayDiaodanLayout(String str, String gouNumber, String mTime) {
         Log.e("swy", str);
-        String trackPark = null;
-        String stringPark = null;
+        String trackPark;
+        String stringPark;
         mList = new ArrayList<>();
         ArrayList<String> diaocan_list = new ArrayList<>();
         try {
@@ -922,7 +941,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             for (int i = 0; i < Integer.valueOf(diaocan_list.get(2)); i++) {
                 mList.add(i + 1 + "," + diaocan_list.get(13 + (i * 3)) + "," + diaocan_list.get(14 + (i * 3)).substring(0, 1) + "," + diaocan_list.get(14 + (i * 3)).substring(1) + "," + diaocan_list.get(15 + (i * 3)));//红色 #FF0000 //牡丹红 #FF00FF
             }
-            Log.e("调单显示方法", mList.size() + "");
             gouTotal = diaocan_list.get(2);
             //设置layoutmanager
             LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -1162,6 +1180,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 .fallbackToDestructiveMigration()
                 .build();
         trackNumber = "0";
+        controlYiChe = false;
+        mJieShiChe = false;
+        mJieWuChe = false;
+        mJieSanChe = false;
+        mJieYiChe = false;
 
         mStartHandler.sendEmptyMessageDelayed(0, 1000);
         parkDataDao = new ParkDataDao(TalkActivity.this);
@@ -1265,6 +1288,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                         pocket.setImei(imei);
                         pocket.setPeopleId(peopleId);
                         pocket.setUserCode(hao);
+                        pocket.setGroup(group);
                         pocket.setType("login");
                         udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
                         break;
@@ -2225,7 +2249,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         protected String doInBackground(Void... params) {
             Date date = new Date();
             SimpleDateFormat format = new SimpleDateFormat("yyyyMMddHHmmss");
-            String time = format.format(date);
+            String time1 = format.format(date);
+            String time = time1.substring(2);
             Log.e("time", time);
             //long time = HookElimination;
             int bydanhao = db.DiaodanDAO().findBydanhao(danhao);
@@ -2293,6 +2318,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             reply = getReply(peopleId, "60");
         }
         sendHexString(reply.replaceAll("\\s*", ""), "232");
+        try {
+            Thread.sleep(100);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private String substring;
@@ -2448,13 +2478,17 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     }
 
     String detailsDan;
+    long djsCountDownTimer = 1000 * 60 * 10;
 
     private class UpdateDatabase extends AsyncTask<Void, Void, String> {
+
+        private List<DiaoDan> sizeAll;
 
         @Override
         protected String doInBackground(Void... params) {
             String allUsers = "";
             String every_add = alpha[4] + "-";
+            sizeAll = db.DiaodanDAO().getAll();
             int byGjhId = db.DiaodanDAO().findByGjhId(mGjhId);
             if (byGjhId > 0) {
                 List<DiaoDan> byGjId = db.DiaodanDAO().findByGjId(mGjhId);
@@ -2476,8 +2510,25 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             String[] split = details.split("-");
             int length = split.length;
             if (length == mList.size()) {
-                DeleteDatabase deleteDatabase = new DeleteDatabase();
-                deleteDatabase.execute();
+                if (sizeAll.size() == 1) {
+                    new CountDownTimer(djsCountDownTimer, 1000) {
+                        public void onTick(long millisUntilFinished) {
+                            Log.e("倒计时", millisUntilFinished + "");
+                        }
+
+                        public void onFinish() {
+                            Log.e("倒计时", "完成");
+                            DeleteDatabase deleteDatabase = new DeleteDatabase();
+                            deleteDatabase.execute();
+                            Intent in2 = new Intent("HookElimination");
+                            in2.putExtra("name2", details);
+                            sendBroadcast(in2);
+                        }
+                    }.start();
+                } else {
+                    DeleteDatabase deleteDatabase = new DeleteDatabase();
+                    deleteDatabase.execute();
+                }
             }
             if (!gjhId.equals("") && !mGjhId.equals("")) {
                 if (gjhId.equals(mGjhId)) {
@@ -3266,7 +3317,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     long mTime2 = 6;
     long mTime3 = 6;
     long mTime4 = 6;
-    long mStartTime = 10;
+    long mStartTime = 20;
 
     @SuppressLint("HandlerLeak")
     private Handler mStartHandler = new Handler() {
@@ -3275,6 +3326,11 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             super.handleMessage(msg);
             mStartTime--;
             if (mStartTime < 0) {
+                TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
+                String deviceId = telephonyManager.getDeviceId();
+                Log.e("deviceId", deviceId);
+                mSpPersonnelType.setIMEI(deviceId);
+                imei = mSpPersonnelType.getIMEI();
                 benJi = getIpAddress();
                 if (pocket == null) {
                     pocket = new Pocket();
@@ -3284,6 +3340,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 pocket.setImei(imei);
                 pocket.setPeopleId(peopleId);
                 pocket.setUserCode(hao);
+                pocket.setGroup(group);
                 pocket.setType("login");
                 udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
             } else {
@@ -3452,23 +3509,29 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             //十车
             Log.i("十五三一车", "西宁测试十车");
             shi = true;
-            pocket.setDataMessage("十车");
-            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            if (!mJieShiChe) {
+                pocket.setDataMessage("十车");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            }
         } else if (distance > 55 && distance <= 66 && wu == false && san == false) {
             //五车
             Log.i("十五三一车", "西宁测试五车");
             wu = true;
             shi = true;
-            pocket.setDataMessage("五车");
-            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            if (!mJieWuChe) {
+                pocket.setDataMessage("五车");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            }
         } else if (distance > 33 && distance <= 44 && san == false) {
             //三车
             Log.i("十五三一车", "西宁测试三车");
             san = true;
             wu = true;
             shi = true;
-            pocket.setDataMessage("三车");
-            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            if (!mJieSanChe) {
+                pocket.setDataMessage("三车");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            }
         } else if (distance <= 22 && yi == false) {
             //一车
             Log.i("十五三一车", "西宁测试一车");
@@ -3476,7 +3539,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             san = true;
             wu = true;
             shi = true;
-            if (controlYiChe == true) {
+            if (!mJieYiChe && controlYiChe == true) {
                 pocket.setDataMessage("一车");
                 udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
             }
