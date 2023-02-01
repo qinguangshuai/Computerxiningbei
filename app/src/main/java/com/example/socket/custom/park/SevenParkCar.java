@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * @date 2020/8/10 16:33
- * 1道停留车
+ * 7道停留车
  */
 public class SevenParkCar extends View {
 
