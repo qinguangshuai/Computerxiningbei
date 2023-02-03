@@ -1,13 +1,24 @@
 package com.example.socket.Activity;
 
 import android.annotation.SuppressLint;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONObject;
+import com.example.socket.Bean.Pocket;
 import com.example.socket.Bean.ZhanchangWrap;
 import com.example.socket.R;
+import com.example.socket.Unit.ButtonUtils;
+import com.example.socket.Unit.Content;
 import com.example.socket.Unit.SpUtil;
 import com.example.socket.custom.dao.ParkDataDao;
 import com.example.socket.custom.people.TopViewdiaochezhang;
@@ -40,7 +51,9 @@ import com.example.socket.custom.xiningbei.BaiLiMap;
 import com.example.socket.custom.xiningbei.ChangFengMap;
 import com.example.socket.custom.xiningbei.XiNingBeiMap;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -81,15 +94,39 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
     private SpUtil mPeople0, mPeople1, mPeople2, mPeople3, mPeople4;
     private String mRatioOfGpsPoint;
     private double mRatioOfGpsTrackCar;
-    private int a = 0;
+    private BroadcastReceiver mBroadcastReceiver;
+    private boolean registTag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_point);
+        setSystemUIVisible(false);
         EventBus.getDefault().register(this);
         initView();
+        initData();
         getSp();
+    }
+
+    private void initData() {
+        mBroadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                switch (intent.getAction()) {
+                    case "ParkingCar":
+                        mOneParkCar.invalidate();
+                        Log.e("ParkingCar","ParkingCar");
+                        break;
+                }
+            }
+        };
+
+        if (mBroadcastReceiver != null && this != null) {
+            IntentFilter mif = new IntentFilter();
+            mif.addAction("ParkingCar");
+            LocalBroadcastManager.getInstance(this).registerReceiver(mBroadcastReceiver, mif);
+            registTag = true;
+        }
     }
 
     private void initView() {
@@ -134,34 +171,6 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
 
         aaa = true;
         ParkDataDao dataDao = new ParkDataDao(this);
-//        dataDao.add("oneParkcar","1","101.767750","36.662057",61);
-//        dataDao.add("oneParkcar","1","101.768745","36.659256",93);
-//        dataDao.add("twelveParkcar","1","","","26");
-//        dataDao.add("twelveParkcar","1","","","46");
-//        dataDao.add("twelveParkcar","1","","","56");
-//        dataDao.add("twelveParkcar","1","","","76");
-//        dataDao.add("thirteenParkcar","1","","","0");
-//        dataDao.add("thirteenParkcar","1","","","60");
-//        dataDao.add("thirteenParkcar","1","","","80");
-//        dataDao.add("thirteenParkcar","1","","","99");
-//        dataDao.add("fourteenParkcar","1","","","50");
-//        dataDao.add("fourteenParkcar","1","","","89");
-//        dataDao.add("fifteenParkcar","1","","","50");
-//        dataDao.add("fifteenParkcar","1","","","89");
-//        dataDao.add("sixteenParkcar","1","","","30");
-//        dataDao.add("sixteenParkcar","1","","","40");
-//        dataDao.add("sixteenParkcar","1","","","50");
-//        dataDao.add("sixteenParkcar","1","","","60");
-//        dataDao.add("seventeenParkcar","1","","","60");
-//        dataDao.add("seventeenParkcar","1","","","70");
-//        dataDao.add("eighteenParkcar","1","","","10");
-//        dataDao.add("eighteenParkcar","1","","","50");
-//        dataDao.add("nineteenParkcar","1","","","0");
-//        dataDao.add("nineteenParkcar","1","","","10");
-//        dataDao.add("nineteenParkcar","1","","","20");
-//        dataDao.add("nineteenParkcar","1","","","40");
-//        dataDao.add("nineteenParkcar","1","","","70");
-//        dataDao.add("nineteenParkcar","1","","","90");
     }
 
     private void getSp() {
@@ -264,7 +273,9 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.narrow:
-                finish();
+                if (ButtonUtils.isFastClick()) {
+                    finish();
+                }
                 break;
         }
     }
@@ -333,5 +344,26 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
         mSeventeenParkCar.setVisibility(View.VISIBLE);
         mEighteenParkCar.setVisibility(View.VISIBLE);
         mNineteenParkCar.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * 隐藏状态栏和导航栏
+     *
+     * @param show boolean类型，true:显示  false ：隐藏
+     */
+    private void setSystemUIVisible(boolean show) {
+        if (show) {
+            int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE;
+            uiFlags |= 0x00001000;
+            getWindow().getDecorView().setSystemUiVisibility(uiFlags);
+        } else {
+            int uiFlags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                    | View.SYSTEM_UI_FLAG_FULLSCREEN;
+            uiFlags |= 0x00001000;
+            getWindow().getDecorView().setSystemUiVisibility(uiFlags);
+        }
     }
 }

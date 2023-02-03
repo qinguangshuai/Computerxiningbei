@@ -1,24 +1,26 @@
 package com.example.socket.Bean;
 
-public class TestUser {
+public class InitializationParkGPSUser {
     private String sGpsLon;
     private String sGpsLat;
     private String eGpsLon;
     private String eGpsLat;
-    private int track;
+    private String track;
     private int carNum;
+    private int pId;
 
-    public TestUser() {
+    public InitializationParkGPSUser() {
         super();
     }
 
-    public TestUser(String sGpsLon, String sGpsLat, String eGpsLon, String eGpsLat, int track, int carNum) {
+    public InitializationParkGPSUser(String sGpsLon, String sGpsLat, String eGpsLon, String eGpsLat, String track, int carNum, int pId) {
         this.sGpsLon = sGpsLon;
         this.sGpsLat = sGpsLat;
         this.eGpsLon = eGpsLon;
         this.eGpsLat = eGpsLat;
         this.track = track;
         this.carNum = carNum;
+        this.pId = pId;
     }
 
     public String getsGpsLon() {
@@ -53,11 +55,11 @@ public class TestUser {
         this.eGpsLat = eGpsLat;
     }
 
-    public int getTrack() {
+    public String getTrack() {
         return track;
     }
 
-    public void setTrack(int track) {
+    public void setTrack(String track) {
         this.track = track;
     }
 
@@ -67,5 +69,13 @@ public class TestUser {
 
     public void setCarNum(int carNum) {
         this.carNum = carNum;
+    }
+
+    public int getpId() {
+        return pId;
+    }
+
+    public void setpId(int pId) {
+        this.pId = pId;
     }
 }

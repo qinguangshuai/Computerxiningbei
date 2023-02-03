@@ -136,28 +136,15 @@ public class ReportDetailAdapter extends RecyclerView.Adapter {
             yearplaninvest_tv = (TextView) itemView.findViewById(R.id.yearplaninvest_tv);
             nowmonthinvest_tv = (TextView) itemView.findViewById(R.id.nowmonthinvest_tv);
             onetonowinvest_tv = (TextView) itemView.findViewById(R.id.onetonowinvest_tv);
-            /*Investmentcompletion_tv = (TextView) itemView.findViewById(R.id.Investmentcompletion_tv);
-            investmentgrowth_tv = (TextView) itemView.findViewById(R.id.investmentgrowth_tv);*/
-            Log.e("swy", "1");
-
             String[] str = list.get(position).split(",");
-
-
             unit_tv.setText(str[0]);
-
             projectnum_tv.setText(str[1]);
-
             yearplaninvest_tv.setText(str[2]);
-
             nowmonthinvest_tv.setText(str[3]);
-
             if (str.length < 5) {
             } else {
                 onetonowinvest_tv.setText(str[4]);
             }
-
-            System.out.println(gou_list + "2222222222222");
-
             try {
                 if (!gou_list.isEmpty()) {
                     for (int i = 0; i < gou_list.size(); i++) {
@@ -166,8 +153,6 @@ public class ReportDetailAdapter extends RecyclerView.Adapter {
                         }
                     }
                 }
-
-
                 if (SendActivity.caozuoyuan.matches("调车长")){
                     itemView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -175,16 +160,12 @@ public class ReportDetailAdapter extends RecyclerView.Adapter {
                             try {
                                 mListener.onItemClick(position, setcolor);
                             }catch (Exception e){}
-
-
                             AlertDialog.Builder builder = new AlertDialog.Builder(context);
                             builder.setIcon(R.drawable.ic_launcher_foreground);
                             builder.setTitle("是否确认勾" + position);
-
                             View view2 = LayoutInflater.from(context).inflate(R.layout.pop_up_dialog_send, null);
                             //    设置我们自己定义的布局文件作为弹出框的Content
                             builder.setView(view2);
-
                             builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                                 @Override
                                 public void onClick(DialogInterface dialog, int which) {
@@ -229,38 +210,6 @@ public class ReportDetailAdapter extends RecyclerView.Adapter {
             linerLayout_re.setBackgroundColor(context.getResources().getColor(R.color.red));
         }
     }
-
-    /*TIMConversation conversation;
-
-    private void sendMessage(String s) {
-        conversation = TIMManager.getInstance().getConversation(
-                TIMConversationType.Group,   //会话类型：
-                target_diaohao+SendActivity.diaohao);
-        TIMMessage msg = new TIMMessage();
-        //添加文本内容
-        TIMTextElem elem = new TIMTextElem();
-        elem.setText(s);
-        if (msg.addElement(elem) != 0) {
-            Log.d("wocao", "addElement failed");
-            return;
-        }
-
-
-        conversation.sendMessage(msg, new TIMValueCallBack<TIMMessage>() {//发送消息回调
-            @Override
-            public void onError(int code, String desc) {//发送消息失败
-                //错误码 code 和错误描述 desc，可用于定位请求失败原因
-                //错误码 code 含义请参见错误码表
-                Log.d("wocao", "send message failed. code: " + code + " errmsg: " + desc);
-            }
-
-            @Override
-            public void onSuccess(TIMMessage msg) {//发送消息成功
-                Log.e("wocao", "SendMsg ok");
-            }
-        });
-        msg = null;
-    }*/
 
     String gou_number = "";
 

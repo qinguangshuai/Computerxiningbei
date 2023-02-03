@@ -58,6 +58,7 @@ public class DetailAdapter extends RecyclerView.Adapter {
         this.gouTotal = gouTotal;
         this.current_time = current_time;
         aaa = false;
+        Log.e("撤回销钩撤回销钩", "" + gou);
     }
 
     DiaoDanDatabase db = null;
@@ -73,6 +74,7 @@ public class DetailAdapter extends RecyclerView.Adapter {
         this.gou = gouNumber;
         this.gouTotal = gouTotal;
         this.current_time = current_time;
+        Log.e("撤回销钩撤回销钩", "" + gou);
     }
 
     @Override
@@ -131,24 +133,11 @@ public class DetailAdapter extends RecyclerView.Adapter {
             nowmonthinvest_tv = (TextView) itemView.findViewById(R.id.nowmonthinvest_tv);
             onetonowinvest_tv = (TextView) itemView.findViewById(R.id.onetonowinvest_tv);
             xiaogou = (ImageView) itemView.findViewById(R.id.xiaogou);
-            /*Investmentcompletion_tv = (TextView) itemView.findViewById(R.id.Investmentcompletion_tv);
-            investmentgrowth_tv = (TextView) itemView.findViewById(R.id.investmentgrowth_tv);*/
-            Log.e("swy", "1    " + position);
-
-            /*if (position % 2 != 0) {
-                linerLayout_re.setBackgroundColor(Color.parseColor("#EDF6FF"));
-            }*/
-
             String[] str = list.get(position).split(",");
-
             unit_tv.setText(str[0]);
-
             projectnum_tv.setText(str[1]);
-
             yearplaninvest_tv.setText(str[2]);
-
             nowmonthinvest_tv.setText(str[3]);
-
             if (str.length < 5) {
             } else {
                 onetonowinvest_tv.setText(str[4]);
@@ -208,17 +197,7 @@ public class DetailAdapter extends RecyclerView.Adapter {
                             nowmonthinvest_tv.setTextColor(Color.parseColor("#ffffff"));
                             onetonowinvest_tv.setTextColor(Color.parseColor("#ffffff"));
                         }
-                    } /*else {
-                        if (TalkActivity.gouName < max) {
-                            if (position == TalkActivity.gouName - 1) {
-                                unit_tv.setTextColor(Color.parseColor("#F9DC43"));
-                                projectnum_tv.setTextColor(Color.parseColor("#F9DC43"));
-                                yearplaninvest_tv.setTextColor(Color.parseColor("#F9DC43"));
-                                nowmonthinvest_tv.setTextColor(Color.parseColor("#F9DC43"));
-                                onetonowinvest_tv.setTextColor(Color.parseColor("#F9DC43"));
-                            }
-                        }
-                    }*/
+                    }
                 } else {
                     if (position == 0) {
                         unit_tv.setTextColor(Color.parseColor("#F9DC43"));
