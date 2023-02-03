@@ -66,6 +66,7 @@ import com.example.socket.Record.RecordState;
 import com.example.socket.Record.RecordStateListener;
 import com.example.socket.Speex.SpeexUtil;
 import com.example.socket.Tcp.TcpHelperServer;
+import com.example.socket.Unit.ButtonUtils;
 import com.example.socket.Unit.CombineCommend;
 import com.example.socket.Unit.Content;
 import com.example.socket.Unit.FileUtil;
@@ -1582,7 +1583,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         soundPool.play(di, 1.0f, 1.0f, 2, 0, 1);
         switch (v.getId()) {
             case R.id.location_lin:
-                showPopwindow();
+                if (ButtonUtils.isFastClick()) {
+                    showPopwindow();
+                }
                 break;
         }
     }
@@ -1652,7 +1655,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         customView.findViewById(R.id.wheel_picker_address_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                popWindow.dismiss();
+                if (ButtonUtils.isFastClick()) {
+                    popWindow.dismiss();
+                }
                 //弹窗关闭  dismiss()时恢复原样
             }
         });
@@ -1660,8 +1665,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             @Override
             public void onClick(View v) {
 //                popWindow.dismiss();
-                Intent newIntent = new Intent(getApplication(), ZhanActivity.class);
-                startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
+                if (ButtonUtils.isFastClick()) {
+                    Intent newIntent = new Intent(getApplication(), ZhanActivity.class);
+                    startActivityForResult(newIntent, REQUEST_SELECT_DEVICE);
+                }
             }
         });
     }

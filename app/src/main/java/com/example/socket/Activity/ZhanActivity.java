@@ -17,6 +17,7 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.socket.Bean.Pocket;
 import com.example.socket.Bean.ZhanchangWrap;
 import com.example.socket.R;
+import com.example.socket.Unit.ButtonUtils;
 import com.example.socket.Unit.Content;
 import com.example.socket.Unit.SpUtil;
 import com.example.socket.custom.dao.ParkDataDao;
@@ -272,7 +273,9 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.narrow:
-                finish();
+                if (ButtonUtils.isFastClick()) {
+                    finish();
+                }
                 break;
         }
     }
