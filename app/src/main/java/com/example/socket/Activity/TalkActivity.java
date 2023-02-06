@@ -955,6 +955,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             cur_recy.setAdapter(detailAdapter);
             detailAdapter.setMsg(mList, gouNumber, str, gouTotal, mTime);
             detailAdapter.notifyDataSetChanged();
+            //解决闪烁
+            //cur_recy.getItemAnimator().setChangeDuration(0);
             //cur_dang.setText("1");
             DecimalFormat df = new DecimalFormat("#0000");
             String format = df.format(Double.valueOf(diaocan_list.get(5)));
