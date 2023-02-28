@@ -135,7 +135,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private boolean yi = false;
     private SpUtil mReceive1, mReceive2, mReceive3, mCar;
     private String receiveSum;
-    private int jinji = 0;//控制接收两遍解锁
     private SpUtil mUrgentState;
     private String mCarGps = "";
     private String mCarSuLv = "";
@@ -199,9 +198,26 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private boolean mJieWuChe = false;
     private boolean mJieSanChe = false;
     private boolean mJieYiChe = false;
+    private int signalling = 0;
+    private String signallingCF = "";
+    private CountDownTimer countDownTimer;
 
     private void sendMessage(String msg, Pocket p) {
+        signalling += 1;
         p.setDataMessage(msg);
+        p.setSignalling(signalling);
+        udpHelperServer.sendStrMessage(JSONObject.toJSONString(p), Content.Ip_Adress, Content.port);
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        udpHelperServer.sendStrMessage(JSONObject.toJSONString(p), Content.Ip_Adress, Content.port);
+        try {
+            Thread.sleep(50);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         udpHelperServer.sendStrMessage(JSONObject.toJSONString(p), Content.Ip_Adress, Content.port);
     }
 
@@ -319,7 +335,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 mGpsPistanceCar = Double.valueOf(gpsPoint);
                                                 EventBus.getDefault().post(new ZhanchangWrap(mRatioOfGpsTrackCar, mGpsPistanceCar));
 
-                                                Log.e("测试", trackNumber);//计算十五三车
+                                                Log.e("测试", trackNumber + mGetRatioOfGpsPointCar);//计算十五三车
                                                 distanceControl(trackNumber, mGetRatioOfGpsPointCar, lat, lon);
                                             }
                                         }
@@ -486,8 +502,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                     sendMessage("lingchewanbi", pocket);
                                     break;
                                 case "73":
-                                    jinji = 1;
                                     lingClear = false;
+                                    signallingCF = xinLingSplit[xinLingSplit.length - 1];
                                     sendMessage("jinjitingche", pocket);
                                     mUrgentState.setName("8");
                                     mUrgentState.setStandard("制动员" + mPeopleId2 + "号");
@@ -496,9 +512,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                 case "75":
                                     //sendMessage(mConversationId, totalDmr);
                                     //qidong();
-                                    if (jinji == 1) {
-                                        jinji++;
+                                    if (!xinLingSplit[xinLingSplit.length - 1].equals(signallingCF)) {
                                         sendMessage("jiesuo", pocket);
+                                        signallingCF = xinLingSplit[xinLingSplit.length - 1];
                                     }
                                     mUrgentState.setName("9");
                                     mUrgentState.setStandard("");
@@ -1175,6 +1191,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 .fallbackToDestructiveMigration()
                 .build();
         trackNumber = "0";
+        repeatSignalling = -1;
         controlYiChe = false;
         mJieShiChe = false;
         mJieWuChe = false;
@@ -1890,6 +1907,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         Double ratioOfGpsPointd1 = Double.valueOf(ratioOfGpsPoint1.substring(0, ratioOfGpsPoint1.indexOf("%")));
         parkDataDao.add("oneParkcar", mInitializationGPS + "", getsGpsLonDouble + "", getsGpsLonDouble + "", ratioOfGpsPointd);
         parkDataDao.add("oneParkcar", mInitializationGPS + "", geteGpsLonDouble + "", geteGpsLatDouble + "", ratioOfGpsPointd1);
+        Log.e("测试停留车", ratioOfGpsPointd + "    " + ratioOfGpsPointd1);
         Intent in = new Intent("ParkingCar");
         LocalBroadcastManager.getInstance(context).sendBroadcast(in);
     }
@@ -1899,7 +1917,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         io = true;
         try {
             Pocket strbean = JSONArray.parseObject(s, Pocket.class);//将数据流整合成包
-            Log.e("解析原始数据", strbean.getDataMessage() + "  " + strbean.getPeopleId() + "  " + strbean.getType());
+            Log.e("解析原始数据", strbean.getGroup() + "  " + strbean.getPeopleId() + "  " + strbean.getType());
             switch (strbean.getType()) {
                 case "DeleteInitializationParkGPS":
                     String deleteTrack = strbean.getDataMessage();
@@ -2093,6 +2111,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     }
                     break;
                 case "DeleteDataBase":
+                    signalling = 0;
                     mVehicleCommander = 0;
                     trackNumber = "0";
                     ReadDatabase readDatabase = new ReadDatabase();
@@ -2371,7 +2390,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     } catch (Exception e) {
                     }
                     break;
-                case "examine_phone"://开机检测
+                case "examine_phone"://开机检测提女
+                    repeatSignalling = -1;
                     if (pocket == null) {
                         pocket = new Pocket();
                     }
@@ -2544,8 +2564,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             dateString = another_data.substring(14, 26);//调单时间
             diaohaoReceiver = another_data.substring(40, 42);//调号
             danhao = another_data.substring(44, 46);
-            InsertDatabase addDatabase = new InsertDatabase();
-            addDatabase.execute();
+            FindAllDatabase findAllDatabase = new FindAllDatabase();
+            findAllDatabase.execute();
         } else if (another_data.contains("BJXT") && another_data.contains(",")) {
             alpha = another_data.split(",");
             Integer mVehicle = Integer.valueOf(alpha[4]);
@@ -2658,6 +2678,43 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
     }
 
+    private class FindAllDatabase extends AsyncTask<Void, Void, String> {
+
+        private List<DiaoDan> all;
+
+        @Override
+        protected String doInBackground(Void... params) {
+            all = db.DiaodanDAO().findByTime();
+            return "";
+        }
+
+        @Override
+        protected void onPostExecute(String details) {
+            if (all.size() == 1) {
+                String gou_number = all.get(0).getGou_number();
+                int length = gou_number.split("-").length;
+                Log.e("调单测试", length + "    " + mList.size());
+                if (mList.size() == length) {
+                    if (countDownTimer != null) {
+                        countDownTimer.onFinish();
+                        countDownTimer.cancel();
+                    }
+                    DeleteDatabase deleteDatabase = new DeleteDatabase();
+                    deleteDatabase.execute();
+                    InsertDatabase addDatabase = new InsertDatabase();
+                    addDatabase.execute();
+                    Log.e("调单测试", "通过");
+                } else {
+                    InsertDatabase addDatabase = new InsertDatabase();
+                    addDatabase.execute();
+                }
+            } else {
+                InsertDatabase addDatabase = new InsertDatabase();
+                addDatabase.execute();
+            }
+        }
+    }
+
     String detailsDan;
     long djsCountDownTimer = 1000 * 60 * 10;
 
@@ -2692,9 +2749,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             int length = split.length;
             if (length == mList.size()) {
                 if (sizeAll.size() == 1) {
-                    new CountDownTimer(djsCountDownTimer, 1000) {
+                    countDownTimer = new CountDownTimer(djsCountDownTimer, 1000) {
                         public void onTick(long millisUntilFinished) {
-                            Log.e("倒计时", millisUntilFinished + "");
                         }
 
                         public void onFinish() {
@@ -2743,125 +2799,77 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
     }
 
+    private int repeatSignalling = -1;
+
     //信令
     private void composeDataCommend(Pocket strbean) {
         //Log.e("swy", "composeDataCommend: "+ strbean.getAnother_data());
         soundIdMap.clear();
-        String titlePosition = strbean.getPeopleId();
-        Log.e("提女", strbean.getDataMessage());
-        //if (pocket == null) {
-        //pocket = new Pocket();
-        //}
-        //多方
-        //p.setTypes("command");
-        //pocket.setTime(System.currentTimeMillis());
-        //pocket.setIpAdress(static_local_ipAdress);
-        //pocket.setImei(imei);
-        //pocket.setGroup(group);
-        //soundPool.play(di, 1.0f, 1.0f, 2, 0, 1);
-        switch (strbean.getDataMessage()) {
-            case "tingche0":
-                /*Log.e("提女1",strbean.getAnother_data());
-                Integer[] mp3tingche = loadRaw(soundPool, this, R.raw.tingche);
-                soundIdMap.put(mp3tingche[0], mp3tingche[1]);
-                new PlayThread().run();*/
-                mControlLocation = false;
-                String replyTingChe = getReply(titlePosition, "71");
-                sendHexString(replyTingChe.replaceAll("\\s*", ""), "232");
-                break;
-            case "qidong0":
-                /*Integer[] mp3qidong = loadRaw(soundPool, this, R.raw.qidong);
-                soundIdMap.put(mp3qidong[0], mp3qidong[1]);
-                new PlayThread().run();*/
-                String replyQiDong = getReply(titlePosition, "41");
-                sendHexString(replyQiDong.replaceAll("\\s*", ""), "232");
-                break;
-            case "jiansu0":
-                /*Integer[] mp3jiansu = loadRaw(soundPool, this, R.raw.jiansu);
-                soundIdMap.put(mp3jiansu[0], mp3jiansu[1]);
-                new PlayThread().run();*/
-                String replyJianSu = getReply(titlePosition, "21");
-                sendHexString(replyJianSu.replaceAll("\\s*", ""), "232");
-                break;
-            case "shiche0":
-                /*Integer[] mp3shiche = loadRaw(soundPool, this, R.raw.shiche);
-                soundIdMap.put(mp3shiche[0], mp3shiche[1]);
-                new PlayThread().run();*/
-                String replyShiChe = getReply(titlePosition, "27");
-                sendHexString(replyShiChe.replaceAll("\\s*", ""), "232");
-                break;
-            case "wuche0":
-                /*Integer[] mp3wuche = loadRaw(soundPool, this, R.raw.wuche);
-                soundIdMap.put(mp3wuche[0], mp3wuche[1]);
-                new PlayThread().run();*/
-                String replyWuChe = getReply(titlePosition, "25");
-                sendHexString(replyWuChe.replaceAll("\\s*", ""), "232");
-                break;
-            case "sanche0":
-                /*Integer[] mp3sanche = loadRaw(soundPool, this, R.raw.sanche);
-                soundIdMap.put(mp3sanche[0], mp3sanche[1]);
-                new PlayThread().run();*/
-                String replySanChe = getReply(titlePosition, "23");
-                sendHexString(replySanChe.replaceAll("\\s*", ""), "232");
-                break;
-            case "yiche0":
-                String replyYiChe = getReply(titlePosition, "26");
-                sendHexString(replyYiChe.replaceAll("\\s*", ""), "232");
-                break;
-            case "lianjie0":
-                /*Integer[] mp3lianjie = loadRaw(soundPool, this, R.raw.lianjie);
-                soundIdMap.put(mp3lianjie[0], mp3lianjie[1]);
-                new PlayThread().run();*/
-                mControlLocation = true;
-                String replyLianJie = getReply(titlePosition, "45");
-                sendHexString(replyLianJie.replaceAll("\\s*", ""), "232");
-                break;
-            case "liufang0":
-                /*Integer[] mp3liufang = loadRaw(soundPool, this, R.raw.liufang);
-                soundIdMap.put(mp3liufang[0], mp3liufang[1]);
-                new PlayThread().run();*/
-                mControlLocation = true;
-                String replyLiuFang = getReply(titlePosition, "47");
-                sendHexString(replyLiuFang.replaceAll("\\s*", ""), "232");
-                break;
-            case "tuijin0":
-                /*Integer[] mp3tuijin = loadRaw(soundPool, this, R.raw.tuijin);
-                soundIdMap.put(mp3tuijin[0], mp3tuijin[1]);
-                new PlayThread().run();*/
-                mControlLocation = true;
-                String replyTuiJin = getReply(titlePosition, "43");
-                sendHexString(replyTuiJin.replaceAll("\\s*", ""), "232");
-                break;
-            case "jiesuo0":
-                /*Integer[] mp3jiesuo = loadRaw(soundPool, this, R.raw.jiesuo);
-                soundIdMap.put(mp3jiesuo[0], mp3jiesuo[1]);
-                new PlayThread().run();*/
-                String replyJieSuo = getReply(titlePosition, "75");
-                sendHexString(replyJieSuo.replaceAll("\\s*", ""), "232");
-                break;
-            case "jinjitingche0":
-                /*Integer[] mp3jinjitingche = loadRaw(soundPool, this, R.raw.jinjitingche);
-                soundIdMap.put(mp3jinjitingche[0], mp3jinjitingche[1]);
-                new PlayThread().run();*/
-                String replyJinJiTingChe = getReply(titlePosition, "73");
-                sendHexString(replyJinJiTingChe.replaceAll("\\s*", ""), "232");
-                break;
-            case "lingche0":
-                /*Integer[] mp3lingche = loadRaw(soundPool, this, R.raw.lingche);
-                soundIdMap.put(mp3lingche[0], mp3lingche[1]);
-                new PlayThread().run();*/
-                String replyLingChe = getReply(titlePosition, "49");
-                sendHexString(replyLingChe.replaceAll("\\s*", ""), "232");
-                break;
-            /*case "lingchewanbi":
-             *//*Integer[] mp3ling = loadRaw(soundPool, this, R.raw.ling);
-                soundIdMap.put(mp3ling[0], mp3ling[1]);
-                new PlayThread().run();*//*
-                String replyLingCheWanBi = getReply(titlePosition, "9A");
-                sendHexString(replyLingCheWanBi.replaceAll("\\s*", ""), "232");
-                break;*/
+        Log.e("提女", strbean.getDataMessage() + "    " + strbean.getType() + "    " + strbean.getSignalling());
+        int signalling = strbean.getSignalling();
+        if (signalling != repeatSignalling) {
+            String titlePosition = strbean.getPeopleId();
+            switch (strbean.getDataMessage()) {
+                case "tingche0":
+                    mControlLocation = false;
+                    String replyTingChe = getReply(titlePosition, "71");
+                    sendHexString(replyTingChe.replaceAll("\\s*", ""), "232");
+                    break;
+                case "qidong0":
+                    String replyQiDong = getReply(titlePosition, "41");
+                    sendHexString(replyQiDong.replaceAll("\\s*", ""), "232");
+                    break;
+                case "jiansu0":
+                    String replyJianSu = getReply(titlePosition, "21");
+                    sendHexString(replyJianSu.replaceAll("\\s*", ""), "232");
+                    break;
+                case "shiche0":
+                    String replyShiChe = getReply(titlePosition, "27");
+                    sendHexString(replyShiChe.replaceAll("\\s*", ""), "232");
+                    break;
+                case "wuche0":
+                    String replyWuChe = getReply(titlePosition, "25");
+                    sendHexString(replyWuChe.replaceAll("\\s*", ""), "232");
+                    break;
+                case "sanche0":
+                    String replySanChe = getReply(titlePosition, "23");
+                    sendHexString(replySanChe.replaceAll("\\s*", ""), "232");
+                    break;
+                case "yiche0":
+                    String replyYiChe = getReply(titlePosition, "26");
+                    sendHexString(replyYiChe.replaceAll("\\s*", ""), "232");
+                    break;
+                case "lianjie0":
+                    mControlLocation = true;
+                    String replyLianJie = getReply(titlePosition, "45");
+                    sendHexString(replyLianJie.replaceAll("\\s*", ""), "232");
+                    break;
+                case "liufang0":
+                    mControlLocation = true;
+                    String replyLiuFang = getReply(titlePosition, "47");
+                    sendHexString(replyLiuFang.replaceAll("\\s*", ""), "232");
+                    break;
+                case "tuijin0":
+                    mControlLocation = true;
+                    String replyTuiJin = getReply(titlePosition, "43");
+                    sendHexString(replyTuiJin.replaceAll("\\s*", ""), "232");
+                    break;
+                case "jiesuo0":
+                    String replyJieSuo = getReply(titlePosition, "75");
+                    sendHexString(replyJieSuo.replaceAll("\\s*", ""), "232");
+                    break;
+                case "jinjitingche0":
+                    String replyJinJiTingChe = getReply(titlePosition, "73");
+                    sendHexString(replyJinJiTingChe.replaceAll("\\s*", ""), "232");
+                    break;
+                case "lingche0":
+                    String replyLingChe = getReply(titlePosition, "49");
+                    sendHexString(replyLingChe.replaceAll("\\s*", ""), "232");
+                    break;
+            }
+            new PlayThread().run();
+            repeatSignalling = signalling;
         }
-        new PlayThread().run();
     }
 
     public String getReply(String peopleId, String instructions) {
