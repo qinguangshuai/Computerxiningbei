@@ -115,7 +115,7 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
                 switch (intent.getAction()) {
                     case "ParkingCar":
                         mOneParkCar.invalidate();
-                        Log.e("ParkingCar","ParkingCar");
+                        Log.e("ParkingCar", "ParkingCar");
                         break;
                 }
             }
@@ -207,10 +207,14 @@ public class ZhanActivity extends AppCompatActivity implements View.OnClickListe
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void onEvent(ZhanchangWrap zhanchangWrap) {
         mRatioOfGpsPoint = zhanchangWrap.getRatioOfGpsTrackCar();
+        if (mRatioOfGpsPoint.equals("-1")) {
+            mTrain.setVisibility(View.GONE);
+        } else {
+            mTrain.setVisibility(View.VISIBLE);
+        }
         mRatioOfGpsTrackCar = zhanchangWrap.getRatioOfGpsPointCar();
         ControlTranslation.proplrMove1(mControlMap, mTrain, mRatioOfGpsPoint, mRatioOfGpsTrackCar, 35, 95);
         ControlTranslation.proplrMove1(mPeople0, mTransferpeople, TalkActivity.mRatioOfGpsTrackCar20, TalkActivity.mGpsPistanceCar20, 35, 95);
-
         ControlTranslation.proplrMove1(mPeople1, mPeopleone, TalkActivity.mRatioOfGpsTrackCar01, TalkActivity.mGpsPistanceCar01, 35, 95);
         ControlTranslation.proplrMove1(mPeople2, mPeopletwo, TalkActivity.mRatioOfGpsTrackCar02, TalkActivity.mGpsPistanceCar02, 35, 95);
         ControlTranslation.proplrMove1(mPeople3, mPeoplethree, TalkActivity.mRatioOfGpsTrackCar03, TalkActivity.mGpsPistanceCar03, 35, 95);

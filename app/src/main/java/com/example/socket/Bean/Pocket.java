@@ -29,8 +29,9 @@ public class Pocket implements Serializable {
     //gjhId
     String gjhId;
     int signalling;
+    String state;
 
-    public Pocket(String type, long time, String ipAdress, byte[] data, String dataMessage, boolean end, int num, String peopleId, String imei, String group, String userCode, String gjhId, int signalling) {
+    public Pocket(String type, long time, String ipAdress, byte[] data, String dataMessage, boolean end, int num, String peopleId, String imei, String group, String userCode, String gjhId, int signalling, String state) {
         this.type = type;
         this.time = time;
         this.ipAdress = ipAdress;
@@ -44,6 +45,7 @@ public class Pocket implements Serializable {
         this.userCode = userCode;
         this.gjhId = gjhId;
         this.signalling = signalling;
+        this.state = state;
     }
 
     public int getSignalling() {
@@ -152,5 +154,13 @@ public class Pocket implements Serializable {
 
     public void setGjhId(String gjhId) {
         this.gjhId = gjhId;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
     }
 }

@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
 import com.example.socket.custom.dao.ParkDataDao;
@@ -64,6 +65,7 @@ public class EightParkCar extends View {
                 Float aDoubleRatioOfGpsPointCar = Float.valueOf(ratioOfGpsPointCar);
                 String ratioOfGpsPointCar1 = eightParkcar.get(i + 1).getRatioOfGpsPointCar();
                 Float aDoubleRatioOfGpsPointCar1 = Float.valueOf(ratioOfGpsPointCar1);
+                Log.e("eightDataDao", aDoubleRatioOfGpsPointCar + "    " + aDoubleRatioOfGpsPointCar1);
                 if (aDoubleRatioOfGpsPointCar >= 21 && aDoubleRatioOfGpsPointCar <= 76 && aDoubleRatioOfGpsPointCar1 >= 21 && aDoubleRatioOfGpsPointCar1 <= 76) {
                     canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar - 21) * 6.05f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar1 - 21) * 6.05f), 50 - disparity, mPaint);
                 } else if (aDoubleRatioOfGpsPointCar >= 21 && aDoubleRatioOfGpsPointCar <= 76 && aDoubleRatioOfGpsPointCar1 > 76) {

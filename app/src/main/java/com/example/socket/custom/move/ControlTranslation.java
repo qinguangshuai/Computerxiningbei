@@ -12,9 +12,6 @@ public class ControlTranslation {
     public static void proplrMove1(SpUtil s1, View v, String ratioOfGpsTrack, double mGpsPistanceCar, int transverse, int disparity) {
         switch (ratioOfGpsTrack) {
             case "1":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 5) {
                     v.setX((float) (320 - transverse + mGpsPistanceCar * 12.8f));
@@ -29,9 +26,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "2":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 87) {
                     v.setX((float) (50 - transverse + mGpsPistanceCar * 8.25f));
@@ -43,18 +37,12 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "3":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 v.setX((float) (128 - transverse + mGpsPistanceCar * 8.46f));
                 v.setY(400 - disparity);
                 v.invalidate();
                 break;
             case "4":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 6) {
                     v.setX((float) (256 - transverse + mGpsPistanceCar * 10.67f));
@@ -69,9 +57,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "5":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 6) {
                     v.setX((float) (320 - transverse + mGpsPistanceCar * 10.67f));
@@ -86,9 +71,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "6":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 83) {
                     v.setX((float) (50 - transverse + mGpsPistanceCar * 8.65f));
@@ -100,9 +82,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "7":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 20) {
                     v.setX((float) (128 - transverse + mGpsPistanceCar * 3.84f));
@@ -117,9 +96,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "8":
-                /*s1.setName("visible");
-                s2.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("zheng");
                 if (mGpsPistanceCar <= 21) {
                     v.setX((float) (230 - transverse + mGpsPistanceCar * 3.67f));
@@ -134,9 +110,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "9":
-                /*s2.setName("visible");
-                s1.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("cf");
                 if (mGpsPistanceCar >= 81) {
                     v.setX((float) (1000 - transverse - (100 - mGpsPistanceCar) * 10.53f));
@@ -151,9 +124,6 @@ public class ControlTranslation {
                 v.invalidate();
                 break;
             case "10":
-                /*s2.setName("visible");
-                s1.setName("gone");
-                s3.setName("gone");*/
                 s1.setName("cf");
                 v.setX((float) (700 - transverse + mGpsPistanceCar * 3f));
                 v.setY(500 - disparity);
