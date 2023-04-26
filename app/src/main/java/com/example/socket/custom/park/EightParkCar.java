@@ -66,22 +66,13 @@ public class EightParkCar extends View {
                 String ratioOfGpsPointCar1 = eightParkcar.get(i + 1).getRatioOfGpsPointCar();
                 Float aDoubleRatioOfGpsPointCar1 = Float.valueOf(ratioOfGpsPointCar1);
                 Log.e("eightDataDao", aDoubleRatioOfGpsPointCar + "    " + aDoubleRatioOfGpsPointCar1);
-                if (aDoubleRatioOfGpsPointCar >= 21 && aDoubleRatioOfGpsPointCar <= 76 && aDoubleRatioOfGpsPointCar1 >= 21 && aDoubleRatioOfGpsPointCar1 <= 76) {
-                    canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar - 21) * 6.05f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar1 - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar >= 21 && aDoubleRatioOfGpsPointCar <= 76 && aDoubleRatioOfGpsPointCar1 > 76) {
-                    canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar - 21) * 6.05f), 50 - disparity, (307 + (76 - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar < 21 && aDoubleRatioOfGpsPointCar1 > 76) {
-                    canvas.drawLine((307 + (21 - 21) * 6.05f), 50 - disparity, (307 + (76 - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar < 21 && aDoubleRatioOfGpsPointCar1 >= 21 && aDoubleRatioOfGpsPointCar1 <= 76) {
-                    canvas.drawLine((307 + (21 - 21) * 6.05f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar1 - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar1 >= 21 && aDoubleRatioOfGpsPointCar1 <= 76 && aDoubleRatioOfGpsPointCar >= 21 && aDoubleRatioOfGpsPointCar <= 76) {
-                    canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar1 - 21) * 6.05f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar1 >= 21 && aDoubleRatioOfGpsPointCar1 <= 76 && aDoubleRatioOfGpsPointCar > 76) {
-                    canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar1 - 21) * 6.05f), 50 - disparity, (307 + (76 - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar1 < 21 && aDoubleRatioOfGpsPointCar > 76) {
-                    canvas.drawLine((307 + (21 - 21) * 6.05f), 50 - disparity, (307 + (76 - 21) * 6.05f), 50 - disparity, mPaint);
-                } else if (aDoubleRatioOfGpsPointCar1 < 21 && aDoubleRatioOfGpsPointCar >= 21 && aDoubleRatioOfGpsPointCar <= 76) {
-                    canvas.drawLine((307 + (21 - 21) * 6.05f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar - 21) * 6.05f), 50 - disparity, mPaint);
+
+                if (aDoubleRatioOfGpsPointCar > 21 && aDoubleRatioOfGpsPointCar1 > 21) {
+                    canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar - 22) * 5.91f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar1 - 22) * 5.91f), 50 - disparity, mPaint);
+                } else if (aDoubleRatioOfGpsPointCar > 21 && aDoubleRatioOfGpsPointCar1 <= 21) {
+                    canvas.drawLine((307 + (aDoubleRatioOfGpsPointCar - 22) * 5.91f), 50 - disparity, (307 + (22 - 22) * 5.91f), 50 - disparity, mPaint);
+                } else if (aDoubleRatioOfGpsPointCar <= 21 && aDoubleRatioOfGpsPointCar1 > 21) {
+                    canvas.drawLine((307 + (22 - 22) * 5.91f), 50 - disparity, (307 + (aDoubleRatioOfGpsPointCar1 - 22) * 5.91f), 50 - disparity, mPaint);
                 }
             }
         }

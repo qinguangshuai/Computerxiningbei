@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Location;
 import android.media.AudioFormat;
@@ -38,6 +39,7 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -199,16 +201,17 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
     private boolean mJieWuChe = false;
     private boolean mJieSanChe = false;
     private boolean mJieYiChe = false;
-    private int signalling = 0;
+    private int signalling1 = 0;
     private String signallingCF = "";
     private CountDownTimer countDownTimer;
     private String state;
+    private TextView mCheShuTest, mJuLiTest;
 
     private void sendMessage(String msg, Pocket p) {
         pocket.setType("command");
-        signalling += 1;
+        //signalling1 += 1;
         p.setDataMessage(msg);
-        p.setSignalling(signalling);
+        p.setSignalling(signalling1);
         udpHelperServer.sendStrMessage(JSONObject.toJSONString(p), Content.Ip_Adress, Content.port);
         try {
             Thread.sleep(50);
@@ -303,9 +306,14 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                                 String lon1 = b2.substring(b2.indexOf(".") + 1);
                                                 Log.e("弯点", "弯点a1: " + a1 + " ");
                                                 Log.e("弯点", "弯点b1: " + b1 + " ");
+
+                                                //大圆盘坐标减去与实际坐标的差值
+                                                //double a1 = a11 - 0.000017;
+                                                //double b1 = b11 - 0.000021;
+
                                                 //计算股道
                                                 mGetGudaoOfGpsPoint = GetGudaoOfGpsPoint(b1, a1);
-                                                track_talk.setText(mGetGudaoOfGpsPoint + "股道");
+                                                trackXianShi(mGetGudaoOfGpsPoint);
                                                 mRatioOfGpsTrackCar = String.valueOf(mGetGudaoOfGpsPoint);
                                                 Point3d point3d = new Point3d();
                                                 point3d.setX(b1);
@@ -522,6 +530,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                 case "43":
                                     //sendMessage(mConversationId, totalDmr);
                                     //tuijin();
+                                    mControlLocation = true;
                                     sendMessage("tuijin", pocket);
                                     break;
                                 case "71":
@@ -537,6 +546,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                     wu = false;
                                     shi = false;
                                     lingClear = false;
+                                    mControlLocation = false;
                                     sendMessage("tingche", pocket);
                                     break;
                                 //减速
@@ -930,6 +940,59 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         });
     }
 
+    private void trackXianShi(int getGudaoOfGpsPoint) {
+        switch (getGudaoOfGpsPoint) {
+            case -1:
+                track_talk.setText("正在定位中...");
+                break;
+            case 6:
+                track_talk.setText("货1");
+                break;
+            case 7:
+                track_talk.setText("货2");
+                break;
+            case 8:
+                track_talk.setText("货3");
+                break;
+            case 9:
+                track_talk.setText("长丰线");
+                break;
+            case 10:
+                track_talk.setText("长丰线");
+                break;
+            case 11:
+                track_talk.setText("园1");
+                break;
+            case 12:
+                track_talk.setText("园2");
+                break;
+            case 13:
+                track_talk.setText("煤2");
+                break;
+            case 14:
+                track_talk.setText("煤1");
+                break;
+            case 15:
+                track_talk.setText("百立线");
+                break;
+            case 16:
+                track_talk.setText("物1");
+                break;
+            case 17:
+                track_talk.setText("物2");
+                break;
+            case 18:
+                track_talk.setText("物3");
+                break;
+            case 19:
+                track_talk.setText("物4");
+                break;
+            default:
+                track_talk.setText(mGetGudaoOfGpsPoint + "股道");
+                break;
+        }
+    }
+
     /*
      * 是否为浮点数？double或float类型。
      * @param str 传入的字符串。
@@ -1313,6 +1376,32 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         mPeople4 = new SpUtil(getApplicationContext(), "people4");
     }
 
+    private Handler handlerQunZu = new Handler();
+    private Runnable rQunZu = new Runnable() {
+        @Override
+        public void run() {
+            if (mQunZu.equals("")) {
+                if (pocket == null) {
+                    pocket = new Pocket();
+                }
+                pocket.setTime(System.currentTimeMillis());
+                pocket.setIpAdress(benJi);
+                pocket.setImei(imei);
+                pocket.setPeopleId(peopleId);
+                pocket.setUserCode(hao);
+                pocket.setGroup(group);
+                pocket.setType("login");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+                handlerQunZu.postDelayed(rQunZu, 2000);
+                Log.e("login", "55");
+            } else {
+                handlerQunZu.removeCallbacks(rQunZu);
+                Toast.makeText(TalkActivity.this, "连接成功", Toast.LENGTH_SHORT).show();
+                Log.e("login", "66");
+            }
+        }
+    };
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -1333,7 +1422,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         mJieWuChe = false;
         mJieSanChe = false;
         mJieYiChe = false;
-        mStartLogin = 1;
         mStartHandler.sendEmptyMessageDelayed(0, 1000);
         parkDataDao = new ParkDataDao(TalkActivity.this);
         mSpPersonnelType = new SpUtil(getApplication(), "PersonnelType");
@@ -1395,7 +1483,6 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 }
             }
         };
-
 
         //ipAddress_saved[4] = HelperPacket.GetIpAddress(Ip_status,TalkActivity.this);
         //tcpHelperServer = new TcpHelperServer(handler);
@@ -1542,6 +1629,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         }
     };
 
+    String mQunZu = "";
+
     Runnable runnable = new Runnable() {
         @Override
         public void run() {
@@ -1563,14 +1652,22 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             pocket.setGroup(TalkActivity.group);
             udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
             handler.postDelayed(this, 14000);
-            if (mStartLogin == 1) {
-                mStartHandler.sendEmptyMessageDelayed(0, 1000);
-                mStartLogin++;
+            if (mQunZu.equals("")) {
+                if (pocket == null) {
+                    pocket = new Pocket();
+                }
+                pocket.setTime(System.currentTimeMillis());
+                pocket.setIpAdress(benJi);
+                pocket.setImei(imei);
+                pocket.setPeopleId(peopleId);
+                pocket.setUserCode(hao);
+                pocket.setGroup(group);
+                pocket.setType("login");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+                Log.e("测试登录", mQunZu + "    000");
             }
         }
     };
-
-    private int mStartLogin = 1;
 
     @Override
     protected void onRestart() {
@@ -1662,6 +1759,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         //startActivity(new Intent(TalkActivity.this,PointActivity.class));
         listDatabase = new ListDatabase();
         listDatabase.execute();
+        handlerQunZu.postDelayed(rQunZu, 2000);
     }
 
     @Override
@@ -1699,6 +1797,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
 //        doStop();
         Log.e(TAG, "onDestroy: ");
         mGpsHandler.removeCallbacks(mGpsRunnable);
+        handlerQunZu.removeCallbacks(rQunZu);
     }
 
 
@@ -1907,7 +2006,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         recordManager.changeFormat(RecordConfig.RecordFormat.PCM);
         int bufferSize = AudioTrack.getMinBufferSize(16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT);
         audioTrack = new AudioTrack(AudioManager.STREAM_MUSIC, 16000, AudioFormat.CHANNEL_OUT_MONO, AudioFormat.ENCODING_PCM_16BIT, bufferSize, AudioTrack.MODE_STREAM);
-        audioTrack.play();
+        //audioTrack.play();
     }
 
     boolean isPlaying = false;
@@ -2248,12 +2347,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                                     mInitializationGPS = 0;
                             }
                         }
-                    }else {
+                    } else {
 
                     }
                     break;
                 case "DeleteDataBase":
-                    signalling = 0;
+                    signalling1 = 0;
                     mVehicleCommander = 0;
                     trackNumber = "0";
                     ReadDatabase readDatabase = new ReadDatabase();
@@ -2521,7 +2620,8 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     group = strbean.getGroup();
                     mSpPersonnelType.setGroup(group);
                     group = mSpPersonnelType.getGroup();
-
+                    mQunZu = group;
+                    Toast.makeText(this, "登录成功", Toast.LENGTH_SHORT).show();
                     if (pocket == null) {
                         pocket = new Pocket();
                     }
@@ -2566,10 +2666,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     //推进后的测机
                     composeMeasuring(strbean);
                     break;
-                case "HookElimination"://消钩
+                case "HookElimination"://销钩
                     composeAdjustment(strbean);
                     break;
-                case "CancleHookElimination"://撤回消钩
+                case "CancleHookElimination"://撤回销钩
                     composeAdjustment(strbean);
                     break;
                 case "OrderAdjustment"://调单
@@ -2737,6 +2837,9 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     mVehicleCommander -= Integer.valueOf(mNumber);
                     break;
             }
+            Log.e("调单", mVehicleCommander + "");
+            mCheShuTest.setText(mVehicleCommander + "个车");
+            mJuLiTest.setText("0米");
             UpdateDatabase updateDatabase = new UpdateDatabase();
             updateDatabase.execute();
         } else if (another_data.contains("JDLT") && another_data.contains(",")) {
@@ -2762,6 +2865,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                     break;
             }
             Log.e("调单", mVehicleCommander + "");
+            mCheShuTest.setText(mVehicleCommander + "个车");
             if (gouSplit.length > 0) {
                 sTime = gouSplit[gouSplit.length - 1];
                 System.out.println("-------------------" + sTime + "------------------121212");
@@ -2961,6 +3065,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         soundIdMap.clear();
         Log.e("提女", strbean.getDataMessage() + "    " + strbean.getType() + "    " + strbean.getSignalling());
         int signalling = strbean.getSignalling();
+        signalling1 = signalling;
         if (signalling != repeatSignalling) {
             String titlePosition = strbean.getPeopleId();
             switch (strbean.getDataMessage()) {
@@ -3457,7 +3562,10 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         cur_dang.setTypeface(fromAsset);
         cur_total.setTypeface(fromAsset);
         //cur_xie.setTypeface(fromAsset);
-
+        mCheShuTest = findViewById(R.id.cheshutest);
+        mJuLiTest = findViewById(R.id.julitest);
+        mCheShuTest.setText(mVehicleCommander + "个车");
+        mJuLiTest.setText("0米");
         handler_xintiao.postDelayed(member_location_rrr, 5000);//心跳
     }
 
@@ -3541,6 +3649,7 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
                 pocket.setGroup(group);
                 pocket.setUserCode(hao);
                 pocket.setImei(imei);
+                pocket.setSpeed(mCarSuLv);
                 udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
             }
             mGpsHandler.postDelayed(mGpsRunnable, 3000);
@@ -3729,85 +3838,85 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             switch (gd) {
                 case "1":
                     mParkcar = parkDataDao.find("oneParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "2":
                     mParkcar = parkDataDao.find("twoParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "3":
                     mParkcar = parkDataDao.find("threeParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "4":
                     mParkcar = parkDataDao.find("fourParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "5":
                     mParkcar = parkDataDao.find("fiveParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "6":
                     mParkcar = parkDataDao.find("sixParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "7":
                     mParkcar = parkDataDao.find("sevenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "8":
-                    mParkcar = parkDataDao.find("eightParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    mParkcar = parkDataDao.find("eightParkcar");//101.770756  36.659945 十进制度
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "9":
                     mParkcar = parkDataDao.find("nineParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "10":
                     mParkcar = parkDataDao.find("tenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "11":
                     mParkcar = parkDataDao.find("elevenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "12":
                     mParkcar = parkDataDao.find("twelveParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "13":
                     mParkcar = parkDataDao.find("thirteenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "14":
                     mParkcar = parkDataDao.find("fourteenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "15":
                     mParkcar = parkDataDao.find("fifteenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "16":
                     mParkcar = parkDataDao.find("sixteenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "17":
                     mParkcar = parkDataDao.find("seventeenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "18":
                     mParkcar = parkDataDao.find("eighteenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
                 case "19":
                     mParkcar = parkDataDao.find("nineteenParkcar");
-                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar);
+                    Parkcar(getRatioOfGpsPointCar, latCar, lonCar, gd);
                     break;
             }
         }
     }
 
-    private void Parkcar(Double getRatioOfGpsPointCar, String latCar, String lonCar) {
+    private void Parkcar(Double getRatioOfGpsPointCar, String latCar, String lonCar, String gd) {
         if (mParkcar.size() > 0) {
             for (int j = 0; j < mParkcar.size(); j++) {
                 String ratioOfGpsPointCar = mParkcar.get(j).getRatioOfGpsPointCar();
@@ -3824,7 +3933,12 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
             Log.e("mZhiList", "mZhiList: " + maxIndex + "  " + minIndex);
             distance(getRatioOfGpsPointCar, minRatioOfGpsPointCar, maxRatioOfGpsPointCar, latCar, lonCar, minLat, minLon, maxLat, maxLon);
         } else {
-            Log.e("mZhiList", "停留车有问题");
+            Log.e("mZhiList", "停留车有问题");//101.770756  36.659945 十进制度
+            switch (gd) {//经度lon000.000000   纬度lat00.000000
+                case "8":
+                    distanceJinTouXian(latCar, lonCar, "101.770756", "36.659945");
+                    break;
+            }
         }
     }
 
@@ -3847,37 +3961,38 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         } else if (getRatioOfGpsPointCar < minRatioOfGpsPointCar && getRatioOfGpsPointCar < maxRatioOfGpsPointCar) {
             mDistanceDian = getDistance(Double.valueOf(minLon), Double.valueOf(minLat), Double.valueOf(latCar), Double.valueOf(lonCar));
         }
-        distance = mDistanceDian - mVehicleCommander * 11;
+        distance = mDistanceDian - mVehicleCommander * 13;
         Log.i("十五三一车", "西宁测试" + distance);
+        mJuLiTest.setText("距停留车" + distance + "米");
         //十五三一车
-        if (distance > 66 && distance <= 121 && shi == false && wu == false && san == false) {
+        if (distance > 105 && distance <= 117 && shi == false && wu == false && san == false) {
             //十车
             Log.i("十五三一车", "西宁测试十车");
             shi = true;
-            if (!mJieShiChe) {
-                pocket.setDataMessage("十车");
-                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
-            }
-        } else if (distance > 55 && distance <= 66 && wu == false && san == false) {
+            //if (!mJieShiChe) {
+            pocket.setDataMessage("十车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            //}
+        } else if (distance > 52 && distance <= 62 && wu == false && san == false) {
             //五车
             Log.i("十五三一车", "西宁测试五车");
             wu = true;
             shi = true;
-            if (!mJieWuChe) {
-                pocket.setDataMessage("五车");
-                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
-            }
-        } else if (distance > 33 && distance <= 44 && san == false) {
+            //if (!mJieWuChe) {
+            pocket.setDataMessage("五车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            //}
+        } else if (distance > 30 && distance <= 40 && san == false) {
             //三车
             Log.i("十五三一车", "西宁测试三车");
             san = true;
             wu = true;
             shi = true;
-            if (!mJieSanChe) {
-                pocket.setDataMessage("三车");
-                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
-            }
-        } else if (distance <= 22 && yi == false) {
+            //if (!mJieSanChe) {
+            pocket.setDataMessage("三车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            //}
+        } else if (distance <= 18 && yi == false) {
             //一车
             Log.i("十五三一车", "西宁测试一车");
             yi = true;
@@ -3895,5 +4010,63 @@ public class TalkActivity extends SerialPortActivity implements View.OnClickList
         float[] results = new float[1];
         Location.distanceBetween(lat1, lon1, lat2, lon2, results);
         return results[0];
+    }
+
+    private void distanceJinTouXian(String latCar, String lonCar, String mLat, String mLon) {
+        if (pocket == null) {
+            pocket = new Pocket();
+        }
+        pocket.setTime(System.currentTimeMillis());
+        pocket.setIpAdress(benJi);
+        pocket.setImei(imei);
+        pocket.setPeopleId(peopleId);
+        pocket.setUserCode(hao);
+        pocket.setGjhId("");
+        pocket.setType("AutomaticBroadcasting");
+        //计算两点的距离
+        mDistanceDian = getDistance(Double.valueOf(mLon), Double.valueOf(mLat), Double.valueOf(latCar), Double.valueOf(lonCar));
+        distance = mDistanceDian - mVehicleCommander * 13;
+        Log.i("十五三一车尽头线", "西宁测试" + distance);
+        mJuLiTest.setText("距尽头线" + distance + "米");
+        //十五三一车
+        if (distance > 105 && distance <= 117 && shi == false && wu == false && san == false) {
+            //十车
+            Log.i("十五三一车", "西宁测试十车");
+            shi = true;
+            //if (!mJieShiChe) {
+            pocket.setDataMessage("十车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            //}
+        } else if (distance > 52 && distance <= 62 && wu == false && san == false) {
+            //五车
+            Log.i("十五三一车", "西宁测试五车");
+            wu = true;
+            shi = true;
+            //if (!mJieWuChe) {
+            pocket.setDataMessage("五车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            //}
+        } else if (distance > 30 && distance <= 40 && san == false) {
+            //三车
+            Log.i("十五三一车", "西宁测试三车");
+            san = true;
+            wu = true;
+            shi = true;
+            //if (!mJieSanChe) {
+            pocket.setDataMessage("三车");
+            udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            //}
+        } else if (distance <= 18 && yi == false) {
+            //一车
+            Log.i("十五三一车", "西宁测试一车");
+            yi = true;
+            san = true;
+            wu = true;
+            shi = true;
+            if (!mJieYiChe && controlYiChe == true) {
+                pocket.setDataMessage("一车");
+                udpHelperServer.sendStrMessage(JSONObject.toJSONString(pocket), Content.Ip_Adress, Content.port);
+            }
+        }
     }
 }

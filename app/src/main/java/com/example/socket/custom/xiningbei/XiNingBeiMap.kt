@@ -69,7 +69,7 @@ class XiNingBeiMap(context: Context?, attrs: AttributeSet?) : View(context, attr
             )
             //右斜线
             canvas?.drawLine(
-                    (canvas.width / 8 * 5).toFloat(),
+                    (canvas.width / 8 * 5.5).toFloat(),
                     height.toFloat() / 12 * 1,
                     canvas.width.toFloat() / 8 * 6,
                     height.toFloat() / 12 * 3,

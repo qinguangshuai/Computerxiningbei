@@ -125,4 +125,22 @@
             android:layout_height="40dp"
             android:src="@drawable/location"/>
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/cheshutest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="车"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:textSize="25sp"/>
+    <TextView
+        android:id="@+id/julitest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="米"
+        android:textColor="@color/colorWhite"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:textSize="25sp"/>
 </RelativeLayout>

@@ -100,12 +100,9 @@ public class ControlTranslation {
                 if (mGpsPistanceCar <= 21) {
                     v.setX((float) (230 - transverse + mGpsPistanceCar * 3.67f));
                     v.setY((float) (150 - disparity - mGpsPistanceCar * 4.76f));
-                } else if (mGpsPistanceCar > 21 && mGpsPistanceCar <= 76) {
-                    v.setX((float) (307 - transverse + (mGpsPistanceCar - 21) * 6.05f));
+                } else if (mGpsPistanceCar > 21) {
+                    v.setX((float) (307 - transverse + (mGpsPistanceCar - 21) * 5.91f));
                     v.setY(50 - disparity);
-                } else {
-                    v.setX((float) (640 - transverse + (mGpsPistanceCar - 76) * 5.33f));
-                    v.setY((float) (50 - disparity + (mGpsPistanceCar - 76) * 4.17f));
                 }
                 v.invalidate();
                 break;
@@ -222,6 +219,11 @@ public class ControlTranslation {
                 s1.setName("bl");
                 v.setX((float) (800 - transverse + mGpsPistanceCar * 2f));
                 v.setY(350 - disparity);
+                v.invalidate();
+                break;
+            case "20":
+                v.setX((float) (704 - transverse + mGpsPistanceCar * 0.64f));
+                v.setY((float) (50 - disparity + mGpsPistanceCar * 1f));
                 v.invalidate();
                 break;
         }

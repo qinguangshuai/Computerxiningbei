@@ -76,8 +76,6 @@ public class SplashActivity extends AppCompatActivity {
         personnelType.setBenJi(ipAddress);
         //获取权限成功,跳转
         mhandler.sendEmptyMessageDelayed(0, 1000);*/
-        startActivity(new Intent(SplashActivity.this, TalkActivity.class));
-        finish();
     }
 
     private String fileContent = "";
